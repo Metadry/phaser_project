@@ -1,11 +1,11 @@
 import Bullet from './Bullet'
 
 export default class BulletStash extends Phaser.Physics.Arcade.Group {
-	constructor(scene, ammo, storeX, storeY) {
+	constructor(scene, stashSize, storeX, storeY) {
 		super(scene.physics.world, scene,
 			{
 				classType: Bullet,
-				frameQuantity: ammo,
+				frameQuantity: stashSize,
 				active: false,
 				visible: false,
 				allowGravity: false,
@@ -27,10 +27,6 @@ export default class BulletStash extends Phaser.Physics.Arcade.Group {
 		if (bullet) {
 			bullet.fire(x, y, flipX);
 		}
-	}
-
-	getAmmo() {
-		return this.getLength() - this.getTotalUsed.length;
 	}
 
 }

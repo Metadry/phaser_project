@@ -13,17 +13,20 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Stats
         this.health = 10;
+        this.ammo = 5;
+        this.maxAmmo = 5;
         this.speed = 200;
         this.minSpeed = 200;
         this.maxSpeed = 400;
         this.jumpSpeed = 200;
-        this.bulletStash = new BulletStash(this.scene, 5, -200, 300);
+        this.bulletStash = new BulletStash(this.scene, 15, -200, 300);
         this.shotDelay = 500;
         this.nextShot = 0;
 
         // Flags
         this.jumping = false;
         this.receivingHit = false;
+        this.infiniteAmmo = false;
 
         // Colliders
         this.setSize(28, 50);
@@ -201,9 +204,18 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 }
             }
 
-            if (this.bulletStash.getAmmo() > 0) {
+            if (this.ammo > 0 || this.infiniteAmmo) {
+                let delay;
+                if (!this.infiniteAmmo) {
+                    delay = this.shotDelay;
+                    this.ammo -= 1;
+                }
+                else {
+                    delay = this.shotDelay / 2;
+                }
+
                 // Shot sound
-                this.nextShot = this.scene.time.now + this.shotDelay;
+                this.nextShot = this.scene.time.now + delay;
                 this.bulletStash.fire(this.x, this.y, this.flipX);
             }
             else {
@@ -216,11 +228,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         if (!this.receivingHit && this.health > 0) {
             this.setVelocity(-this.body.velocity.x / 2, -this.body.velocity.y / 2);
             this.receivingHit = true;
+            this.infiniteAmmo = false;
 
             this.health -= damage;
             // Hurt sound
             this.anims.play('hurt', true);
         }
+    }
+
+    refillAmmo() {
+        this.ammo = this.maxAmmo;
     }
 
     isAlive() {
