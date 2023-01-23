@@ -25,69 +25,76 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.jumping = false;
         this.receivingHit = false;
 
-        // Animations and colliders
-        this.spriteName = spriteName;
+        // Colliders
         this.setSize(28, 50);
         this.setOffset(22.5, 16);
-    }
 
-    create() {
         this.anims.create({
             key: 'idle',
-            frames: this.anims.generateFrameNumbers(this.spriteName, { start: 16, end: 19 }),
+            frames: this.scene.anims.generateFrameNames('spritesPlayer',
+                { start: 1, end: 4, prefix: 'idle-' }),
             frameRate: 6,
             repeat: -1
         });
 
+        // Animations
         this.anims.create({
             key: 'run',
-            frames: this.anims.generateFrameNumbers(this.spriteName, { start: 0, end: 7 }),
+            frames: this.scene.anims.generateFrameNames('spritesPlayer',
+                { start: 1, end: 8, prefix: 'run-' }),
             frameRate: 12,
             repeat: -1
         });
 
         this.anims.create({
             key: 'runSprint',
-            frames: this.anims.generateFrameNumbers(this.spriteName, { start: 0, end: 7 }),
+            frames: this.scene.anims.generateFrameNames('spritesPlayer',
+                { start: 1, end: 8, prefix: 'run-' }),
             frameRate: 18,
             repeat: -1
         });
 
         this.anims.create({
             key: 'jump',
-            frames: this.anims.generateFrameNumbers(this.spriteName, { start: 20, end: 23 }),
+            frames: this.scene.anims.generateFrameNames('spritesPlayer',
+                { start: 1, end: 4, prefix: 'jump-' }),
             frameRate: 8
         });
 
         this.anims.create({
             key: 'fall',
-            frames: [{ key: this.spriteName, frame: 23 }],
+            frames: this.scene.anims.generateFrameNames('spritesPlayer',
+                { start: 4, end: 4, prefix: 'jump-' }),
             frameRate: 20
         });
 
         this.anims.create({
             key: 'shoot',
-            frames: [{ key: this.spriteName, frame: 39 }],
+            frames: this.scene.anims.generateFrameNames('spritesPlayer',
+                { start: 1, end: 1, prefix: 'shoot-' }),
             duration: 1000
         });
 
         this.anims.create({
             key: 'runShoot',
-            frames: this.anims.generateFrameNumbers(this.spriteName, { start: 8, end: 15 }),
+            frames: this.scene.anims.generateFrameNames('spritesPlayer',
+                { start: 1, end: 8, prefix: 'run-shoot-' }),
             frameRate: 12,
             repeat: -1
         });
 
         this.anims.create({
             key: 'runShootSprint',
-            frames: this.anims.generateFrameNumbers(this.spriteName, { start: 8, end: 15 }),
+            frames: this.scene.anims.generateFrameNames('spritesPlayer',
+                { start: 1, end: 8, prefix: 'run-shoot-' }),
             frameRate: 18,
             repeat: -1
         });
 
         this.anims.create({
             key: 'hurt',
-            frames: [{ key: this.spriteName, frame: 31 }],
+            frames: this.scene.anims.generateFrameNames('spritesPlayer',
+                { start: 1, end: 1, prefix: 'hurt-' }),
             duration: 500
         });
 
@@ -98,9 +105,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     update() {
         if (!this.receivingHit && this.isAlive()) {
-            this.speedControl();
             this.move();
-            this.moveAnims();
             this.jump();
             this.shoot();
         }
@@ -124,6 +129,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     move() {
+        this.speedControl();
+
         if (this.cursors.left.isDown) {
             this.setFlipX(true);
             this.setVelocityX(-this.speed);
@@ -135,6 +142,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         else {
             this.setVelocityX(0);
         }
+
+        this.moveAnims();
     }
 
     moveAnims() {

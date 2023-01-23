@@ -6,6 +6,8 @@ export default class PlayerPlayground extends Phaser.Scene {
         this.load.image('ground', 'platform.png');
         this.load.image('bullet', 'bullet.png');
         this.load.spritesheet('player', 'player/player-spritesheet.png', { frameWidth: 71, frameHeight: 67 });
+        this.load.image('player', 'player/idle/idle-1.png');
+        this.load.atlas('spritesPlayer', 'player_anim/player-anim.png', 'player_anim/player-anim-atlas.json');
     }
 
     create() {
@@ -16,7 +18,6 @@ export default class PlayerPlayground extends Phaser.Scene {
         this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
 
         this.player = new Player(this, 400, 300, 'player');
-        this.player.create();
 
         this.cameras.main.startFollow(this.player);
 
