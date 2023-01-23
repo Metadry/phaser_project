@@ -1,4 +1,4 @@
-import Inventory from './Inventory'
+import BulletStash from './BulletStash'
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, spriteName) {
@@ -8,13 +8,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.scene.physics.add.existing(this);
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.jumpBtn = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.sprintBtn = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
         this.shootBtn = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
 
         // Stats
         this.health = 10;
         this.speed = 200;
+        this.minSpeed = 200;
+        this.maxSpeed = 400;
         this.jumpSpeed = 200;
-        this.inventory;
+        this.bulletStash = new BulletStash(this.scene, 5, -200, 300);
         this.shotDelay = 500;
         this.nextShot = 0;
 
@@ -30,6 +33,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     create() {
         this.anims.create({
+            key: 'idle',
+            frames: this.anims.generateFrameNumbers(this.spriteName, { start: 16, end: 19 }),
+            frameRate: 6,
+            repeat: -1
+        });
+
+        this.anims.create({
             key: 'run',
             frames: this.anims.generateFrameNumbers(this.spriteName, { start: 0, end: 7 }),
             frameRate: 12,
@@ -37,9 +47,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         });
 
         this.anims.create({
-            key: 'idle',
-            frames: this.anims.generateFrameNumbers(this.spriteName, { start: 16, end: 19 }),
-            frameRate: 6,
+            key: 'runSprint',
+            frames: this.anims.generateFrameNumbers(this.spriteName, { start: 0, end: 7 }),
+            frameRate: 18,
             repeat: -1
         });
 
@@ -56,12 +66,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         });
 
         this.anims.create({
-            key: 'hurt',
-            frames: [{ key: this.spriteName, frame: 31 }],
-            duration: 500
-        });
-
-        this.anims.create({
             key: 'shoot',
             frames: [{ key: this.spriteName, frame: 39 }],
             duration: 1000
@@ -74,20 +78,48 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             repeat: -1
         });
 
+        this.anims.create({
+            key: 'runShootSprint',
+            frames: this.anims.generateFrameNumbers(this.spriteName, { start: 8, end: 15 }),
+            frameRate: 18,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'hurt',
+            frames: [{ key: this.spriteName, frame: 31 }],
+            duration: 500
+        });
+
         this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + "hurt", function () {
             this.receivingHit = false;
         }, this);
     }
 
     update() {
-        if (Phaser.Input.Keyboard.JustDown(this.cursors.up)) {
-            this.receiveHit(2);
-        }
-        if (!this.receivingHit) {
+        if (!this.receivingHit && this.isAlive()) {
+            this.speedControl();
             this.move();
-            this.jump();
             this.moveAnims();
+            this.jump();
             this.shoot();
+        }
+    }
+
+    speedControl() {
+        if (this.body.touching.down) {
+            if (this.sprintBtn.isDown) {
+                this.speed = this.maxSpeed;
+            }
+            else {
+                this.speed = this.minSpeed;
+            }
+        }
+        else {
+            if ((this.cursors.left.isDown && this.body.velocity.x == this.maxSpeed)
+                || (this.cursors.right.isDown && this.body.velocity.x == -this.maxSpeed)) {
+                this.speed = this.minSpeed;
+            }
         }
     }
 
@@ -105,31 +137,36 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    jump() {
-        if (this.body.touching.down && this.jumpBtn.isDown) {
-            // Jump sound
-            this.anims.play('jump', true);
-            this.setVelocityY(-this.jumpSpeed);
-            this.jumping = true;
-        }
-    }
-
     moveAnims() {
         if (!this.body.touching.down) {
             if (!this.jumping) {
                 this.anims.play('fall', true);
             }
         }
-        else if (this.jumpBtn.isUp) {
+        else {
             this.jumping = false;
             if (this.shootBtn.isUp) {
                 if (this.cursors.left.isDown || this.cursors.right.isDown) {
-                    this.anims.play('run', true);
+                    if (Math.abs(this.body.velocity.x) == this.maxSpeed) {
+                        this.anims.play('runSprint', true);
+                    }
+                    else {
+                        this.anims.play('run', true);
+                    }
                 }
                 else {
                     this.anims.play('idle', true);
                 }
             }
+        }
+    }
+
+    jump() {
+        if (this.body.touching.down && Phaser.Input.Keyboard.JustDown(this.jumpBtn)) {
+            // Jump sound
+            this.setVelocityY(-this.jumpSpeed);
+            this.anims.play('jump', true);
+            this.jumping = true;
         }
     }
 
@@ -143,17 +180,22 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             }
             else {
                 if (!this.jumping && (this.cursors.left.isDown || this.cursors.right.isDown)) {
-                    this.anims.play('runShoot', true);
+                    if (Math.abs(this.body.velocity.x) == this.maxSpeed) {
+                        this.anims.play('runShootSprint', true);
+                    }
+                    else {
+                        this.anims.play('runShoot', true);
+                    }
                 }
                 else {
                     this.anims.play('shoot', true);
                 }
             }
 
-            if (this.inventory.ammo > 0) {
+            if (this.bulletStash.getAmmo() > 0) {
                 // Shot sound
                 this.nextShot = this.scene.time.now + this.shotDelay;
-                this.inventory.fire(this.x, this.y, this.flipX);
+                this.bulletStash.fire(this.x, this.y, this.flipX);
             }
             else {
                 // No ammo sound
@@ -170,6 +212,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             // Hurt sound
             this.anims.play('hurt', true);
         }
+    }
+
+    isAlive() {
+        return this.health > 0;
     }
 
 }
