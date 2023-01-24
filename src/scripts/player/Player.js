@@ -42,6 +42,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         });
 
         // Animations
+        this.depth = 10;
+
         this.anims.create({
             key: 'run',
             frames: this.scene.anims.generateFrameNames('spritesPlayer',
@@ -151,7 +153,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     moveAnims() {
-        if (!this.body.touching.down) {
+        if (!this.body.onFloor()) {
             if (!this.jumping) {
                 this.anims.play('fall', true);
             }
@@ -176,7 +178,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     jump() {
-        if (Phaser.Input.Keyboard.JustDown(this.jumpBtn) && (this.body.touching.down || this.midAirJumpEnabled)) {
+        if (Phaser.Input.Keyboard.JustDown(this.jumpBtn) && (this.body.onFloor() || this.midAirJumpEnabled)) {
             // Jump sound
             this.setVelocityY(-this.jumpSpeed);
             this.anims.play('jump', true);
@@ -190,7 +192,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             return;
         }
         else if (this.shootBtn.isDown) {
-            if (!this.body.touching.down) {
+            if (!this.body.onFloor()) {
                 this.anims.play('fall', true);
             }
             else {
@@ -234,6 +236,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.shootBoostEnabled = false;
 
             this.health -= damage;
+
+            if (this.health <= 0) {
+                this.setVelocity(0);
+            }
+
             // Hurt sound
             this.anims.play('hurt', true);
         }

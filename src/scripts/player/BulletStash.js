@@ -17,6 +17,7 @@ export default class BulletStash extends Phaser.Physics.Arcade.Group {
 			});
 
 		this.getChildren().forEach(bullet => {
+			bullet.depth = 10;
 			bullet.setStorePosition(storeX, storeY);
 			bullet.body.setSize(32, 32);
 		});
