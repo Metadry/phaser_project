@@ -56,7 +56,7 @@ export default class PlayerPlayground extends Phaser.Scene {
         this.portals = this.physics.add.group({
             classType: Portal,
             frameQuantity: 2,
-            setXY: { x: 300, y: 450, stepX: 200 },
+            setXY: { x: 200, y: 450, stepX: 200 },
             key: 'portal'
         });
 
@@ -69,7 +69,7 @@ export default class PlayerPlayground extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.ammoPacks, this.refillAmmo, null, this);
         this.physics.add.overlap(this.player, this.shootBoosts, this.enableShootBoost, null, this);
         this.physics.add.overlap(this.player, this.midAirJumps, this.enableMidAirJump, null, this);
-        this.physics.add.overlap(this.player, this.portals, this.teleport, null, this);
+        this.physics.add.overlap(this.player, this.portals, this.teleportPlayer, null, this);
         this.physics.add.overlap(this.player.bulletStash, this.portals, this.teleport, null, this);
     }
 
@@ -82,8 +82,8 @@ export default class PlayerPlayground extends Phaser.Scene {
             portal.init();
         });
 
-        this.portals.getChildren()[0].setTeleportPortal(this.portals.getChildren()[1]);
-        this.portals.getChildren()[1].setTeleportPortal(this.portals.getChildren()[0]);
+        this.portals.getChildren()[0].setTeleportPoint(this.portals.getChildren()[1].x);
+        this.portals.getChildren()[1].setTeleportPoint(this.portals.getChildren()[0].x);
     }
 
     // Collision functions
@@ -104,7 +104,13 @@ export default class PlayerPlayground extends Phaser.Scene {
         }
     }
 
+    teleportPlayer(player, portal) {
+        if (Phaser.Input.Keyboard.JustDown(player.cursors.up)) {
+            portal.teleport(player, 0);
+        }
+    }
+
     teleport(object, portal) {
-        portal.teleport(object);
+        portal.teleport(object, 16);
     }
 }

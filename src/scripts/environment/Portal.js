@@ -1,8 +1,7 @@
 export default class Portal extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, tpX, tpY) {
+    constructor(scene, x, y, tp) {
         super(scene, x, y, 'portal');
-        this.tpX = tpX;
-        this.tpY = tpY;
+        this.tp = tp;
     }
 
     init() {
@@ -10,18 +9,23 @@ export default class Portal extends Phaser.Physics.Arcade.Sprite {
         this.body.setOffset(16, 14);
     }
 
-    teleport(object) {
-        let side = object.flipX ? -1 : 1;
-        object.setX(this.tpX + side * this.body.width);
+    teleport(object, offset) {
+        let offsetX;
+        if (offset != 0) {
+            offsetX = offset;
+            if (object.body.velocity.x < 0) {
+                offsetX *= -1;
+            }
+        }
+        else {
+            offsetX = 0;
+        }
+
+        object.setX(this.tp + offsetX);
         object.setY(this.y);
     }
 
-    setTeleportPortal(object) {
-        this.setTeleportPoint(object.x, object.y);
-    }
-
-    setTeleportPoint(x, y) {
-        this.tpX = x;
-        this.tpY = y;
+    setTeleportPoint(x) {
+        this.tp = x;
     }
 }
