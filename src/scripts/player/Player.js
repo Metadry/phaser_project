@@ -26,7 +26,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         // Flags
         this.jumping = false;
         this.receivingHit = false;
-        this.infiniteAmmo = false;
+        this.shootBoostEnabled = false;
+        this.midAirJumpEnabled = false;
 
         // Colliders
         this.setSize(28, 50);
@@ -156,6 +157,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
         else {
+            this.midAirJumpEnabled = false;
             this.jumping = false;
             if (this.shootBtn.isUp) {
                 if (this.cursors.left.isDown || this.cursors.right.isDown) {
@@ -174,10 +176,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     jump() {
-        if (this.body.touching.down && Phaser.Input.Keyboard.JustDown(this.jumpBtn)) {
+        if (Phaser.Input.Keyboard.JustDown(this.jumpBtn) && (this.body.touching.down || this.midAirJumpEnabled)) {
             // Jump sound
             this.setVelocityY(-this.jumpSpeed);
             this.anims.play('jump', true);
+            this.midAirJumpEnabled = false;
             this.jumping = true;
         }
     }
@@ -204,9 +207,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 }
             }
 
-            if (this.ammo > 0 || this.infiniteAmmo) {
+            if (this.ammo > 0 || this.shootBoostEnabled) {
                 let delay;
-                if (!this.infiniteAmmo) {
+                if (!this.shootBoostEnabled) {
                     delay = this.shotDelay;
                     this.ammo -= 1;
                 }
@@ -226,9 +229,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     receiveHit(damage) {
         if (!this.receivingHit && this.health > 0) {
-            this.setVelocity(-this.body.velocity.x / 2, -this.body.velocity.y / 2);
+            this.setVelocity(this.body.velocity.x / 4, this.body.velocity.y / 4);
             this.receivingHit = true;
-            this.infiniteAmmo = false;
+            this.shootBoostEnabled = false;
 
             this.health -= damage;
             // Hurt sound

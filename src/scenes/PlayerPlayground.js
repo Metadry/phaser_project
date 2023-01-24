@@ -5,8 +5,9 @@ export default class PlayerPlayground extends Phaser.Scene {
         this.load.image('sky', 'space3.png');
         this.load.image('ground', 'platform.png');
         this.load.image('bullet', 'bullet.png');
-        this.load.image('ammoPack', 'ammoPack.png');
-        this.load.image('infiniteAmmoPack', 'infiniteAmmoPack.png');
+        this.load.image('ammoPack', 'items/ammoPack.png');
+        this.load.image('shootBoost', 'items/shootBoost.png');
+        this.load.image('midAirJump', 'items/midAirJump.png');
         this.load.spritesheet('player', 'player/player-spritesheet.png', { frameWidth: 71, frameHeight: 67 });
         this.load.image('player', 'player/idle/idle-1.png');
         this.load.atlas('spritesPlayer', 'player_anim/player-anim.png', 'player_anim/player-anim-atlas.json');
@@ -28,17 +29,26 @@ export default class PlayerPlayground extends Phaser.Scene {
             setXY: { x: 12, y: 0, stepX: 70 }
         });
 
-        this.infiniteAmmos = this.physics.add.group({
-            key: 'infiniteAmmoPack',
+        this.shootBoosts = this.physics.add.group({
+            key: 'shootBoost',
             repeat: 0,
             setXY: { x: 600, y: 0, stepX: 0 }
         });
 
+        this.midAirJumps = this.physics.add.group({
+            key: 'midAirJump',
+            immovable: true,
+            allowGravity: false,
+            repeat: 0,
+            setXY: { x: 600, y: 300, stepX: 0 }
+        });
+
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.ammoPacks, this.platforms);
-        this.physics.add.collider(this.infiniteAmmos, this.platforms);
+        this.physics.add.collider(this.shootBoosts, this.platforms);
         this.physics.add.overlap(this.player, this.ammoPacks, this.refillAmmo, null, this);
-        this.physics.add.overlap(this.player, this.infiniteAmmos, this.setInfiniteAmmo, null, this);
+        this.physics.add.overlap(this.player, this.shootBoosts, this.enableShootBoost, null, this);
+        this.physics.add.overlap(this.player, this.midAirJumps, this.enableMidAirJump, null, this);
     }
 
     update() {
@@ -50,8 +60,12 @@ export default class PlayerPlayground extends Phaser.Scene {
         this.player.refillAmmo();
     }
 
-    setInfiniteAmmo(player, infiniteAmmo) {
-        infiniteAmmo.disableBody(true, true);
-        this.player.infiniteAmmo = true;
+    enableShootBoost(player, shootBoost) {
+        shootBoost.disableBody(true, true);
+        this.player.shootBoostEnabled = true;
+    }
+
+    enableMidAirJump(player, midAirJump) {
+        this.player.midAirJumpEnabled = true;
     }
 }
