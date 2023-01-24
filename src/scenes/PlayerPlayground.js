@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import Player from '../scripts/player/Player'
+import MidAirJump from '../scripts/powerups/MidAirJump';
 export default class PlayerPlayground extends Phaser.Scene {
     preload() {
         this.load.image('sky', 'space3.png');
@@ -36,11 +37,12 @@ export default class PlayerPlayground extends Phaser.Scene {
         });
 
         this.midAirJumps = this.physics.add.group({
-            key: 'midAirJump',
+            classType: MidAirJump,
+            frameQuantity: 1,
             immovable: true,
             allowGravity: false,
-            repeat: 0,
-            setXY: { x: 600, y: 300, stepX: 0 }
+            setXY: { x: 600, y: 300 },
+            key: 'midAirJump'
         });
 
         this.physics.add.collider(this.player, this.platforms);
@@ -66,6 +68,9 @@ export default class PlayerPlayground extends Phaser.Scene {
     }
 
     enableMidAirJump(player, midAirJump) {
-        this.player.midAirJumpEnabled = true;
+        if (midAirJump.active) {
+            midAirJump.active = false;
+            this.player.midAirJumpEnabled = true;
+        }
     }
 }

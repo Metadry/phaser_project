@@ -234,6 +234,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.shootBoostEnabled = false;
 
             this.health -= damage;
+
+            if (this.health <= 0) {
+                this.setVelocity(0);
+            }
+
             // Hurt sound
             this.anims.play('hurt', true);
         }
