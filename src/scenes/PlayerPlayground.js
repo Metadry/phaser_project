@@ -17,7 +17,7 @@ export default class PlayerPlayground extends Phaser.Scene {
     create() {
         this.add.image(400, 300, 'sky')
         this.platforms = this.physics.add.staticGroup();
-        this.platforms.create(400, 450, 'ground');
+        this.platforms.create(400, 430, 'ground');
         this.platforms.create(-100, 500, 'ground');
         this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
 
@@ -26,14 +26,14 @@ export default class PlayerPlayground extends Phaser.Scene {
 
         this.ammoPacks = this.physics.add.group({
             key: 'ammoPack',
-            repeat: 2,
+            repeat: 1,
             setXY: { x: 12, y: 0, stepX: 70 }
         });
 
         this.shootBoosts = this.physics.add.group({
             key: 'shootBoost',
             repeat: 0,
-            setXY: { x: 600, y: 0, stepX: 0 }
+            setXY: { x: 580, y: 0, stepX: 0 }
         });
 
         this.midAirJumps = this.physics.add.group({
@@ -41,7 +41,7 @@ export default class PlayerPlayground extends Phaser.Scene {
             frameQuantity: 1,
             immovable: true,
             allowGravity: false,
-            setXY: { x: 600, y: 300 },
+            setXY: { x: 700, y: 450 },
             key: 'midAirJump'
         });
 
@@ -68,8 +68,8 @@ export default class PlayerPlayground extends Phaser.Scene {
     }
 
     enableMidAirJump(player, midAirJump) {
-        if (midAirJump.active) {
-            midAirJump.active = false;
+        if (midAirJump.enabled) {
+            midAirJump.enabled = false;
             this.player.midAirJumpEnabled = true;
         }
     }
