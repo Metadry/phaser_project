@@ -42,6 +42,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         });
 
         // Animations
+        this.depth = 10;
+
         this.anims.create({
             key: 'run',
             frames: this.scene.anims.generateFrameNames('spritesPlayer',

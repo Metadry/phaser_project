@@ -1,17 +1,25 @@
 import Phaser from 'phaser'
+import Portal from '../scripts/environment/Portal';
 import Player from '../scripts/player/Player'
 import MidAirJump from '../scripts/powerups/MidAirJump';
 export default class PlayerPlayground extends Phaser.Scene {
     preload() {
+        // Background
         this.load.image('sky', 'space3.png');
         this.load.image('ground', 'platform.png');
-        this.load.image('bullet', 'bullet.png');
+
+        // Environment
+        this.load.image('portal', 'environment/portal.png');
+
+        // Items
         this.load.image('ammoPack', 'items/ammoPack.png');
         this.load.image('shootBoost', 'items/shootBoost.png');
         this.load.image('midAirJump', 'items/midAirJump.png');
-        this.load.spritesheet('player', 'player/player-spritesheet.png', { frameWidth: 71, frameHeight: 67 });
+
+        // Player
         this.load.image('player', 'player/idle/idle-1.png');
         this.load.atlas('spritesPlayer', 'player_anim/player-anim.png', 'player_anim/player-anim-atlas.json');
+        this.load.image('bullet', 'bullet.png');
     }
 
     create() {
@@ -45,18 +53,40 @@ export default class PlayerPlayground extends Phaser.Scene {
             key: 'midAirJump'
         });
 
+        this.portals = this.physics.add.group({
+            classType: Portal,
+            frameQuantity: 2,
+            setXY: { x: 300, y: 450, stepX: 200 },
+            key: 'portal'
+        });
+
+        this.initPortals();
+
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.ammoPacks, this.platforms);
         this.physics.add.collider(this.shootBoosts, this.platforms);
+        this.physics.add.collider(this.portals, this.platforms);
         this.physics.add.overlap(this.player, this.ammoPacks, this.refillAmmo, null, this);
         this.physics.add.overlap(this.player, this.shootBoosts, this.enableShootBoost, null, this);
         this.physics.add.overlap(this.player, this.midAirJumps, this.enableMidAirJump, null, this);
+        this.physics.add.overlap(this.player, this.portals, this.teleport, null, this);
+        this.physics.add.overlap(this.player.bulletStash, this.portals, this.teleport, null, this);
     }
 
     update() {
         this.player.update();
     }
 
+    initPortals() {
+        this.portals.getChildren().forEach(portal => {
+            portal.init();
+        });
+
+        this.portals.getChildren()[0].setTeleportPortal(this.portals.getChildren()[1]);
+        this.portals.getChildren()[1].setTeleportPortal(this.portals.getChildren()[0]);
+    }
+
+    // Collision functions
     refillAmmo(player, ammoPack) {
         ammoPack.disableBody(true, true);
         this.player.refillAmmo();
@@ -72,5 +102,9 @@ export default class PlayerPlayground extends Phaser.Scene {
             midAirJump.enabled = false;
             this.player.midAirJumpEnabled = true;
         }
+    }
+
+    teleport(object, portal) {
+        portal.teleport(object);
     }
 }
