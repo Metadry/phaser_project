@@ -25,6 +25,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Flags
         this.jumping = false;
+        this.onAir = false;
         this.receivingHit = false;
         this.shootBoostEnabled = false;
         this.midAirJumpEnabled = false;
@@ -137,6 +138,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     move() {
         this.speedControl();
 
+        if (this.onAir && this.body.onFloor()) {
+            this.scene.sound.play('ground');
+        }
+
+        this.onAir = !this.body.onFloor();
+
         if (this.cursors.left.isDown) {
             this.setFlipX(true);
             this.setVelocityX(-this.speed);
@@ -179,7 +186,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     jump() {
         if (Phaser.Input.Keyboard.JustDown(this.jumpBtn) && (this.body.onFloor() || this.midAirJumpEnabled)) {
-            // Jump sound
+            this.scene.sound.play('jump');
             this.setVelocityY(-this.jumpSpeed);
             this.anims.play('jump', true);
             this.midAirJumpEnabled = false;
@@ -209,22 +216,26 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 }
             }
 
+            let delay;
+            if (!this.shootBoostEnabled) {
+                delay = this.shotDelay;
+            }
+            else {
+                delay = this.shotDelay / 2;
+            }
+
+            this.nextShot = this.scene.time.now + delay;
+
             if (this.ammo > 0 || this.shootBoostEnabled) {
-                let delay;
                 if (!this.shootBoostEnabled) {
-                    delay = this.shotDelay;
                     this.ammo -= 1;
                 }
-                else {
-                    delay = this.shotDelay / 2;
-                }
 
-                // Shot sound
-                this.nextShot = this.scene.time.now + delay;
+                this.scene.sound.play('shoot');
                 this.bulletStash.fire(this.x, this.y, this.flipX);
             }
             else {
-                // No ammo sound
+                this.scene.sound.play('noAmmo');
             }
         }
     }
@@ -241,7 +252,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 this.setVelocity(0);
             }
 
-            // Hurt sound
+            this.scene.sound.play('hurt');
             this.anims.play('hurt', true);
         }
     }
