@@ -11,9 +11,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     preUpdate() {
         if (this.x + this.disableOffset < this.scene.cameras.main.worldView.x
             || this.x - this.disableOffset > this.scene.cameras.main.worldView.x + this.scene.cameras.main.worldView.width) {
-            this.body.x = this.storeX;
-            this.body.y = this.storeY;
-            this.disableBody(true, true);
+            this.stash();
         }
     }
 
@@ -28,6 +26,12 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         }
         this.enableBody(true, x + offset, y - 8, true, true);
         this.setVelocityX(shootSpeed);
+    }
+
+    stash() {
+        this.body.x = this.storeX;
+        this.body.y = this.storeY;
+        this.disableBody(true, true);
     }
 
     setStorePosition(storeX, storeY) {
