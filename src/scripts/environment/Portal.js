@@ -21,6 +21,7 @@ export default class Portal extends Phaser.Physics.Arcade.Sprite {
             offsetX = 0;
         }
 
+        this.scene.sound.play('teleport');
         object.setX(this.tp + offsetX);
         object.setY(this.y);
     }
