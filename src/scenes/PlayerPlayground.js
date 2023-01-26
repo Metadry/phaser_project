@@ -73,6 +73,7 @@ export default class PlayerPlayground extends Phaser.Scene {
         this.initPortals();
 
         this.physics.add.collider(this.player, this.platforms);
+        this.physics.add.collider(this.player.bulletStash, this.platforms, this.bulletHitBlock, null, this);
         this.physics.add.collider(this.ammoPacks, this.platforms);
         this.physics.add.collider(this.shootBoosts, this.platforms);
         this.physics.add.collider(this.portals, this.platforms);
@@ -97,6 +98,10 @@ export default class PlayerPlayground extends Phaser.Scene {
     }
 
     // Collision functions
+    bulletHitBlock(bullet, platform) {
+        bullet.stash();
+    }
+
     refillAmmo(player, ammoPack) {
         this.sound.play('pickUp');
         ammoPack.disableBody(true, true);
