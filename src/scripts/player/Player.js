@@ -231,7 +231,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     receiveHit(damage) {
         if (!this.receivingHit && this.health > 0) {
-            this.setVelocity(this.body.velocity.x / 4, this.body.velocity.y / 4);
+            this.setVelocity(this.body.velocity.x / -3, this.body.velocity.y / -3);
             this.receivingHit = true;
             this.shootBoostEnabled = false;
 
