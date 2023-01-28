@@ -20,7 +20,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.speed = 200;
         this.minSpeed = 200;
         this.maxSpeed = 400;
-        this.jumpSpeed = 200;
+        this.jumpSpeed = 265;
         this.bulletStash = new BulletStash(this.scene, 15, -200, 300);
         this.shotDelay = 500;
         this.nextShot = 0;
