@@ -1,11 +1,4 @@
 { "compressionlevel":-1,
- "editorsettings":
-    {
-     "export":
-        {
-         "format":"json"
-        }
-    },
  "height":33,
  "infinite":false,
  "layers":[
@@ -48,7 +41,7 @@
          "name":"BackGround",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":60,
          "x":0,
          "y":0
@@ -92,7 +85,7 @@
          "name":"Foreground",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":60,
          "x":0,
          "y":0
@@ -136,8 +129,30 @@
          "name":"Stairs",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":60,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":28,
+         "name":"StairsObject",
+         "objects":[
+                {
+                 "height":287,
+                 "id":45,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1792,
+                 "y":384.5
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -180,8 +195,41 @@
          "name":"Portal",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":60,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":27,
+         "name":"PortalObject",
+         "objects":[
+                {
+                 "height":96,
+                 "id":43,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":98,
+                 "x":1726.5,
+                 "y":927
+                }, 
+                {
+                 "height":95.6666666666667,
+                 "id":44,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":95.6666666666667,
+                 "x":0,
+                 "y":864.333333333333
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -224,8 +272,107 @@
          "name":"TilesDeath",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":60,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":26,
+         "name":"TilesDeathObject",
+         "objects":[
+                {
+                 "height":18.6666666666666,
+                 "id":35,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":543.787878787879,
+                 "x":0.666666666666629,
+                 "y":1038
+                }, 
+                {
+                 "height":17.25,
+                 "id":36,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32.25,
+                 "x":959.5,
+                 "y":1038.75
+                }, 
+                {
+                 "height":18.9166666666667,
+                 "id":37,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":95.25,
+                 "x":1344.54166666667,
+                 "y":1036.70833333333
+                }, 
+                {
+                 "height":18.9167,
+                 "id":38,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":95.25,
+                 "x":1118.375,
+                 "y":1038.54165
+                }, 
+                {
+                 "height":18.9167,
+                 "id":39,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":63.5833333333333,
+                 "x":1535.70833333333,
+                 "y":1037.20831666667
+                }, 
+                {
+                 "height":31.9167,
+                 "id":40,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":94.9166333333334,
+                 "x":737.20835,
+                 "y":351.874983333333
+                }, 
+                {
+                 "height":31.9167,
+                 "id":41,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":224.4166,
+                 "x":927.208366666667,
+                 "y":415.54165
+                }, 
+                {
+                 "height":31.9167,
+                 "id":42,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":318.917,
+                 "x":1280.2915,
+                 "y":448.04165
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -268,7 +415,7 @@
          "name":"Detail",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":60,
          "x":0,
          "y":0
@@ -312,7 +459,7 @@
          "name":"Detail2",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":60,
          "x":0,
          "y":0
@@ -356,7 +503,7 @@
          "name":"Detail3",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":60,
          "x":0,
          "y":0
@@ -400,8 +547,129 @@
          "name":"TilesMoveV",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":60,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":25,
+         "name":"TilesMoveVObject",
+         "objects":[
+                {
+                 "height":32.5454545454546,
+                 "id":25,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32.3636363636364,
+                 "x":224,
+                 "y":991.818181818182
+                }, 
+                {
+                 "height":32.3636363636364,
+                 "id":26,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":31.8181818181818,
+                 "x":448,
+                 "y":991.636363636364
+                }, 
+                {
+                 "height":32.25,
+                 "id":27,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":31.75,
+                 "x":704.25,
+                 "y":800
+                }, 
+                {
+                 "height":32.3636363636364,
+                 "id":28,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32.3636363636365,
+                 "x":1087.81818181818,
+                 "y":863.636363636364
+                }, 
+                {
+                 "height":32.6666666666667,
+                 "id":29,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32.6666666666667,
+                 "x":1311.33333333333,
+                 "y":831.333333333333
+                }, 
+                {
+                 "height":32.3636363636364,
+                 "id":30,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32.3636363636363,
+                 "x":1567.63636363636,
+                 "y":768
+                }, 
+                {
+                 "height":32,
+                 "id":31,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32.3636363636364,
+                 "x":479.636363636364,
+                 "y":576.181818181818
+                }, 
+                {
+                 "height":32.3636363636364,
+                 "id":32,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":31.8181818181819,
+                 "x":704,
+                 "y":287.818181818182
+                }, 
+                {
+                 "height":32.3636363636364,
+                 "id":33,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32.3636363636364,
+                 "x":927.818181818182,
+                 "y":256.181818181818
+                }, 
+                {
+                 "height":32.3636363636364,
+                 "id":34,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":31.6363636363635,
+                 "x":1248.18181818182,
+                 "y":319.818181818182
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -444,8 +712,52 @@
          "name":"TilesMoveH",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":60,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":24,
+         "name":"TilesMoveHObject",
+         "objects":[
+                {
+                 "height":31.3333333333334,
+                 "id":18,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":31.6666666666667,
+                 "x":1119.66666666667,
+                 "y":992.333333333333
+                }, 
+                {
+                 "height":31.6666666666666,
+                 "id":19,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32.6666666666665,
+                 "x":1344,
+                 "y":992
+                }, 
+                {
+                 "height":31.3333333333334,
+                 "id":20,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32.3333333333333,
+                 "x":1535.33333333333,
+                 "y":992.333333333333
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -488,8 +800,30 @@
          "name":"Collectable",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":60,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":21,
+         "name":"CollectableObject",
+         "objects":[
+                {
+                 "height":32.0909090909091,
+                 "id":13,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32.3636363636364,
+                 "x":575.818181818182,
+                 "y":895.909090909091
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -532,8 +866,52 @@
          "name":"DoubleJump",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":60,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":22,
+         "name":"DoubleJumpObject",
+         "objects":[
+                {
+                 "height":32.3636363636364,
+                 "id":14,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32.5454545454547,
+                 "x":1439.81818181818,
+                 "y":832
+                }, 
+                {
+                 "height":31.8181818181819,
+                 "id":15,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32.3636363636363,
+                 "x":1503.63636363636,
+                 "y":896
+                }, 
+                {
+                 "height":32.3636363636364,
+                 "id":16,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32.3636363636365,
+                 "x":1567.81818181818,
+                 "y":959.636363636364
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -664,14 +1042,159 @@
          "name":"EndGame",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":60,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":23,
+         "name":"EndGameObject",
+         "objects":[
+                {
+                 "height":98,
+                 "id":17,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":94.5,
+                 "x":64,
+                 "y":63.5
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":29,
+         "name":"MomiaObject",
+         "objects":[
+                {
+                 "height":35,
+                 "id":66,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":36.5,
+                 "x":353,
+                 "y":223.5
+                }, 
+                {
+                 "height":35,
+                 "id":68,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":37.3333333333334,
+                 "x":665.666666666667,
+                 "y":222
+                }, 
+                {
+                 "height":32,
+                 "id":69,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":704,
+                 "y":928
+                }, 
+                {
+                 "height":32,
+                 "id":70,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":832,
+                 "y":928
+                }, 
+                {
+                 "height":32,
+                 "id":74,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1408,
+                 "y":768
+                }, 
+                {
+                 "height":32,
+                 "id":75,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1344,
+                 "y":768
+                }, 
+                {
+                 "height":32,
+                 "id":76,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1184,
+                 "y":800
+                }, 
+                {
+                 "height":32,
+                 "id":77,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1120,
+                 "y":800
+                }, 
+                {
+                 "height":32,
+                 "id":78,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":480,
+                 "y":928
+                }, 
+                {
+                 "height":32,
+                 "id":79,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":608,
+                 "y":928
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":21,
- "nextobjectid":13,
+ "nextlayerid":30,
+ "nextobjectid":80,
  "orientation":"orthogonal",
+ "parallaxoriginx":7,
+ "parallaxoriginy":0,
  "renderorder":"right-down",
  "tiledversion":"1.8.5",
  "tileheight":32,

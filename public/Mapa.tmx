@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="right-down" width="60" height="33" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="46">
+<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="right-down" width="60" height="33" tilewidth="32" tileheight="32" infinite="0" parallaxoriginx="7" parallaxoriginy="0" nextlayerid="30" nextobjectid="80">
  <editorsettings>
   <export format="json"/>
  </editorsettings>
@@ -576,5 +576,17 @@
  </layer>
  <objectgroup id="23" name="EndGameObject">
   <object id="17" x="64" y="63.5" width="94.5" height="98"/>
+ </objectgroup>
+ <objectgroup id="29" name="MomiaObject">
+  <object id="66" x="353" y="223.5" width="36.5" height="35"/>
+  <object id="68" x="665.667" y="222" width="37.3333" height="35"/>
+  <object id="69" x="704" y="928" width="32" height="32"/>
+  <object id="70" x="832" y="928" width="32" height="32"/>
+  <object id="74" x="1408" y="768" width="32" height="32"/>
+  <object id="75" x="1344" y="768" width="32" height="32"/>
+  <object id="76" x="1184" y="800" width="32" height="32"/>
+  <object id="77" x="1120" y="800" width="32" height="32"/>
+  <object id="78" x="480" y="928" width="32" height="32"/>
+  <object id="79" x="608" y="928" width="32" height="32"/>
  </objectgroup>
 </map>
