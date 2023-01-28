@@ -1,18 +1,18 @@
 import Phaser from 'phaser'
 
-import Juego from './scenes/Juego'
+import Level from './scenes/Level'
 
 const config = {
 	type: Phaser.AUTO,
-	width: 1920,
-	height: 1080,
+	width: 800,
+	height: 600,
 	physics: {
 		default: 'arcade',
 		arcade: {
 			gravity: { y: 200 }
 		}
 	},
-	scene: [Juego]
+	scene: [Level]
 }
 
 export default new Phaser.Game(config)
