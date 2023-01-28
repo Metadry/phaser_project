@@ -20,6 +20,16 @@ export default class PlayerPlayground extends Phaser.Scene {
         this.load.image('player', 'player/idle/idle-1.png');
         this.load.atlas('spritesPlayer', 'player_anim/player-anim.png', 'player_anim/player-anim-atlas.json');
         this.load.image('bullet', 'bullet.png');
+
+        // Sounds
+        this.load.audio('shoot', 'sounds/effects/shoot.mp3');
+        this.load.audio('noAmmo', 'sounds/effects/noAmmo.mp3');
+        this.load.audio('pickUp', 'sounds/effects/pickUp.mp3');
+        this.load.audio('pickUpBoost', 'sounds/effects/pickUpBoost.mp3');
+        this.load.audio('jump', 'sounds/effects/jump.mp3');
+        this.load.audio('ground', 'sounds/effects/ground.mp3');
+        this.load.audio('hurt', 'sounds/effects/hurt.mp3');
+        this.load.audio('teleport', 'sounds/effects/teleport.mp3');
     }
 
     create() {
@@ -63,6 +73,7 @@ export default class PlayerPlayground extends Phaser.Scene {
         this.initPortals();
 
         this.physics.add.collider(this.player, this.platforms);
+        this.physics.add.collider(this.player.bulletStash, this.platforms, this.bulletHitBlock, null, this);
         this.physics.add.collider(this.ammoPacks, this.platforms);
         this.physics.add.collider(this.shootBoosts, this.platforms);
         this.physics.add.collider(this.portals, this.platforms);
@@ -87,12 +98,18 @@ export default class PlayerPlayground extends Phaser.Scene {
     }
 
     // Collision functions
+    bulletHitBlock(bullet, platform) {
+        bullet.stash();
+    }
+
     refillAmmo(player, ammoPack) {
+        this.sound.play('pickUp');
         ammoPack.disableBody(true, true);
         this.player.refillAmmo();
     }
 
     enableShootBoost(player, shootBoost) {
+        this.sound.play('pickUpBoost');
         shootBoost.disableBody(true, true);
         this.player.shootBoostEnabled = true;
     }
