@@ -11,6 +11,9 @@ export default class Mummy extends Phaser.Physics.Arcade.Sprite{
         this.health = 10;
         this.speed = 75;
 
+        // Direction
+        this.direction = -1;
+
         this.scene.anims.create(
             {
                 key: 'walk',
