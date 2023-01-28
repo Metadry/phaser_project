@@ -4,7 +4,10 @@ import ShootBoost from "../scripts/items/ShootBoost";
 import MidAirJump from "../scripts/items/MidAirJump";
 import Portal from "../scripts/environment/Portal";
 import Mummy from '../scripts/enemies/Mummy';
+import TrapH from '../scripts/environment/TrapH';
+import TrapV from '../scripts/environment/TrapV';
 import Hud from "../scripts/hud/hudConfig";
+import Win from "./Win";
 
 export default class Level extends Phaser.Scene {
 
@@ -24,7 +27,7 @@ export default class Level extends Phaser.Scene {
         this.load.image('midAirJump', 'sprites/items/midAirJump.png');
 
         // Traps
-        this.load.image('trap', 'sprites/environment/trap.png');
+        this.load.image('trap', 'environment/trap.png');
         
         // Environment
         this.load.image('portal', 'sprites/interactables/portal.png');
@@ -54,8 +57,11 @@ export default class Level extends Phaser.Scene {
         this.load.audio('hurt', 'sounds/effects/hurt.mp3');
         this.load.audio('teleport', 'sounds/effects/teleport.mp3');
 
-        //Music
+        // Music
         this.load.audio('phaserMusic', 'sounds/effects/phaserMusic.mp3');
+
+        // Win
+        this.game.scene.add('Win', Win);
     }
 
     create() {
@@ -72,6 +78,9 @@ export default class Level extends Phaser.Scene {
         this.player.update();
         this.mummies.forEach(mummy => {
             mummy.update();
+        });
+        this.traps.forEach(trap => {
+            trap.update();
         });
     }
 
@@ -142,6 +151,11 @@ export default class Level extends Phaser.Scene {
 
         portals[0].setTeleportPoint(portals[1]);
         portals[1].setTeleportPoint(portals[0]);
+
+        this.map.getObjectLayer('EndGameObject')['objects'].forEach(endGame => {
+            let winPortal = new Portal(this, endGame.x, endGame.y);
+            this.physics.add.overlap(this.player, winPortal, this.win, null, this);
+        });
     }
 
     initEnemies() {
@@ -167,7 +181,19 @@ export default class Level extends Phaser.Scene {
     }
 
     initTraps() {
+        this.traps = [];
 
+        this.map.getObjectLayer('TilesMoveVObject')['objects'].forEach(traps => {
+            let trap = new TrapV(this, traps.x + 15, traps.y - 75);
+            this.physics.add.collider(this.player, trap, this.onCrash, null, this);
+            this.traps.push(trap);
+        });
+
+        this.map.getObjectLayer('TilesMoveHObject')['objects'].forEach(traps => {
+            let trap = new TrapH(this, traps.x + 25, traps.y);
+            this.physics.add.collider(this.player, trap, this.onCrash, null, this);
+            this.traps.push(trap);
+        });
     }
 
     initHud() {
@@ -225,4 +251,12 @@ export default class Level extends Phaser.Scene {
         mummy.receiveHit(10);
     }
 
+    onCrash() {
+        this.player.receiveHit(2);
+    }
+
+    win() {
+        this.sound.stopByKey('phaserMusic');
+        this.scene.start('Win');
+    }
 }

@@ -7,7 +7,7 @@ export default class Win extends Phaser.Scene {
 
     create() {
         this.add.image(512, 384, 'win');
-        this.sound.play('jingle_win');
+        this.sound.play('jingle_win', {volume: 0.2});
     }
 
 }
