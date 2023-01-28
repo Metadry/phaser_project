@@ -45,29 +45,30 @@ export default class Level extends Phaser.Scene {
         this.add.tileSprite(0, 0, 2848, 1024, 'hg');
 
         var map = this.make.tilemap({ key: 'Mapa' });
-        var tilesItems = map.addTilesetImage('Items', 'items');
         var tiles = map.addTilesetImage('Mapa', 'tiles');
 
-        var layerBackground = map.createLayer('BackGround', tiles, 0, 0);
-        var layerForeground = map.createLayer('Foreground', tiles, 0, 0);
-        var layerStairs = map.createLayer('Stairs', tiles, 0, 0);
-        var layerPortal = map.createLayer('Portal', tiles, 0, 0);
-        var layerTilesDeath = map.createLayer('TilesDeath', tiles, 0, 0);
-        var layerDetail = map.createLayer('Detail', tiles, 0, 0);
-        var layerDetail2 = map.createLayer('Detail2', tiles, 0, 0);
-        var layerDetail3 = map.createLayer('Detail3', tiles, 0, 0);
+        map.createLayer('BackGround', tiles, 0, 0);
+        var platforms = map.createLayer('Foreground', tiles, 0, 0);
+        map.createLayer('Stairs', tiles, 0, 0);
+        var deathPlatforms = map.createLayer('TilesDeath', tiles, 0, 0);
+        map.createLayer('Detail', tiles, 0, 0);
+        map.createLayer('Detail2', tiles, 0, 0);
+        map.createLayer('Detail3', tiles, 0, 0);
         var layerTilesMoveV = map.createLayer('TilesMoveV', tiles, 0, 0);
         var layerTilesMoveH = map.createLayer('TilesMoveH', tiles, 0, 0);
         var layerEndgame = map.createLayer('EndGame', tiles, 0, 0);
 
-        layerForeground.setCollisionByExclusion(-1, true);
+        platforms.setCollisionByExclusion(-1, true);
+        deathPlatforms.setCollisionByExclusion(-1, true);
 
-        this.player = new Player(this, 100, 450, 'player');
+        this.start = { x: 100, y: 450 };
+        this.player = new Player(this, this.start.x, this.start.y, 'player');
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
-        this.physics.add.collider(this.player, layerForeground);
-        this.physics.add.collider(this.player.bulletStash, layerForeground, this.bulletHitBlock, null, this);
+        this.physics.add.collider(this.player, platforms);
+        this.physics.add.collider(this.player, deathPlatforms, this.player.reset, null, this.player);
+        this.physics.add.collider(this.player.bulletStash, platforms, this.bulletHitBlock, null, this);
 
         this.initObjects(map);
     }
@@ -80,36 +81,32 @@ export default class Level extends Phaser.Scene {
         this.ammoPacks = map.getObjectLayer('AmmoObject')['objects'];
         for (let i = 0; i < this.ammoPacks.length; i++) {
             let ammoPack = new AmmoPack(this, this.ammoPacks[i].x, this.ammoPacks[i].y);
-            this.physics.add.overlap(this.player, ammoPack, this.refillAmmo, null, this);
+            this.physics.add.overlap(this.player, ammoPack, ammoPack.use, null, ammoPack);
         }
 
         this.shootBoosts = map.getObjectLayer('CollectableObject')['objects'];
         for (let i = 0; i < this.shootBoosts.length; i++) {
             let shootBoost = new ShootBoost(this, this.shootBoosts[i].x, this.shootBoosts[i].y);
-            this.physics.add.overlap(this.player, shootBoost, this.enableShootBoost, null, this);
+            this.physics.add.overlap(this.player, shootBoost, shootBoost.use, null, shootBoost);
         }
 
         this.midAirJumps = map.getObjectLayer('DoubleJumpObject')['objects'];
         for (let i = 0; i < this.midAirJumps.length; i++) {
             let midAirJump = new MidAirJump(this, this.midAirJumps[i].x, this.midAirJumps[i].y);
-            this.physics.add.overlap(this.player, midAirJump, this.enableMidAirJump, null, this);
+            this.physics.add.overlap(this.player, midAirJump, midAirJump.use, null, midAirJump);
         }
 
         this.portalObjects = map.getObjectLayer('PortalObject')['objects'];
         this.portals = [];
         for (let i = 0; i < this.portalObjects.length; i++) {
             let portal = new Portal(this, this.portalObjects[i].x, this.portalObjects[i].y);
-            portal.init();
-            this.physics.add.overlap(this.player, portal, this.enableMidAirJump, null, this);
-            this.physics.add.overlap(this.player.bulletStash, portal, this.teleport, null, this);
-            //this.physics.add.overlap(this.player, portal, this.teleportPlayer, null, this);
-
+            this.physics.add.overlap(this.player, portal, portal.teleportPlayer, null, portal);
+            //this.physics.add.overlap(this.player.bulletStash, portal, portal.teleportObject, null, this);
             this.portals.push(portal);
         }
 
-        this.portals[0].setTeleportPoint(this.portals[1].x);
-        this.portals[1].setTeleportPoint(this.portals[0].x);
-
+        this.portals[0].setTeleportPoint(this.portals[1]);
+        this.portals[1].setTeleportPoint(this.portals[0]);
     }
 
     // Collision functions
@@ -117,33 +114,8 @@ export default class Level extends Phaser.Scene {
         bullet.stash();
     }
 
-    refillAmmo(player, ammoPack) {
-        this.sound.play('pickUp');
-        ammoPack.disableBody(true, true);
-        this.player.refillAmmo();
-    }
-
-    enableShootBoost(player, shootBoost) {
-        this.sound.play('pickUpBoost');
-        shootBoost.disableBody(true, true);
-        this.player.shootBoostEnabled = true;
-    }
-
-    enableMidAirJump(player, midAirJump) {
-        if (midAirJump.enabled) {
-            midAirJump.enabled = false;
-            this.player.midAirJumpEnabled = true;
-        }
-    }
-
-    teleportPlayer(player, portal) {
-        if (Phaser.Input.Keyboard.JustDown(player.cursors.up)) {
-            portal.teleport(player, 0);
-        }
-    }
-
-    teleport(bullet, portal) {
-        portal.teleport(bullet, 16);
+    teleportObject(object, portal) {
+        portal.teleport(object, 16);
     }
 
 }

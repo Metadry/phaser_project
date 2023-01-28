@@ -1,16 +1,21 @@
 export default class Portal extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, tp) {
-        super(scene, x, y, 'portal');
+    constructor(scene, x, y, tpX, tpY) {
+        super(scene, x + 48, y + 64, 'portal');
         this.scene = scene;
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
         this.body.allowGravity = false;
-        this.tp = tp;
-    }
-
-    init() {
         this.body.setSize(32, 50);
         this.body.setOffset(16, 14);
+
+        this.tpX = tpX;
+        this.tpY = tpY;
+    }
+
+    teleportPlayer() {
+        if (Phaser.Input.Keyboard.JustDown(this.scene.player.cursors.up)) {
+            this.teleport(this.scene.player, 0);
+        }
     }
 
     teleport(object, offset) {
@@ -26,11 +31,12 @@ export default class Portal extends Phaser.Physics.Arcade.Sprite {
         }
 
         this.scene.sound.play('teleport');
-        object.setX(this.tp + offsetX);
-        object.setY(this.y);
+        object.setX(this.tpX + offsetX);
+        object.setY(this.tpY);
     }
 
-    setTeleportPoint(x) {
-        this.tp = x;
+    setTeleportPoint(portal) {
+        this.tpX = portal.x;
+        this.tpY = portal.y;
     }
 }

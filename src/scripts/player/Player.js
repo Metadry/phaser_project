@@ -14,6 +14,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Stats
         this.health = 10;
+        this.maxHealth = 10;
         this.ammo = 5;
         this.maxAmmo = 5;
         this.speed = 200;
@@ -120,7 +121,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     speedControl() {
-        if (this.body.touching.down) {
+        if (this.body.onFloor()) {
             if (this.sprintBtn.isDown) {
                 this.speed = this.maxSpeed;
             }
@@ -260,6 +261,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     refillAmmo() {
         this.ammo = this.maxAmmo;
+    }
+
+    reset() {
+        this.setX(this.scene.start.x);
+        this.setY(this.scene.start.y);
+        this.health = this.maxHealth;
+        this.refillAmmo();
     }
 
     isAlive() {
