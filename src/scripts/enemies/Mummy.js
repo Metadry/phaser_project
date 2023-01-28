@@ -14,6 +14,10 @@ export default class Mummy extends Phaser.Physics.Arcade.Sprite{
         // Direction
         this.direction = -1;
 
+        // Limits
+        this.limit1 = 0;
+        this.limit2 = 0;
+
         this.scene.anims.create(
             {
                 key: 'walk',
@@ -28,12 +32,12 @@ export default class Mummy extends Phaser.Physics.Arcade.Sprite{
 
     update()
     {
-        if (this.x < 210) {
+        if (this.x <= this.limit1 + 20) {
             this.setFlipX(false);
             this.setVelocityX(this.speed * 1);
         } 
 
-        if (this.x > 600) {
+        if (this.x >= this.limit2 + 10) {
             this.setFlipX(true);
             this.setVelocityX(this.speed * -1);
         }
