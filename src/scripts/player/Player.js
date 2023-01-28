@@ -1,4 +1,5 @@
 import BulletStash from './BulletStash'
+import Hud from '../hud/hudConfig'
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, spriteName) {
@@ -21,6 +22,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.maxSpeed = 400;
         this.jumpSpeed = 265;
         this.bulletStash = new BulletStash(this.scene, 15, -200, 300);
+        this.hud = new Hud(this.scene);
         this.shotDelay = 500;
         this.nextShot = 0;
 
@@ -258,9 +260,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.shootBoostEnabled = false;
 
             this.health -= damage;
-
+            
             if (this.health <= 0) {
                 this.setVelocity(0);
+            } else{
+                this.hud.updateHealthBar(this.health, 150);
             }
 
             this.scene.sound.play('hurt');
@@ -270,6 +274,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     refillAmmo() {
         this.ammo = this.maxAmmo;
+        this.hud.setMaxAmmo();
     }
 
     reset(position) {

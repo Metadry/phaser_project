@@ -9,37 +9,38 @@ import Hud from "../scripts/hud/hudConfig";
 export default class Level extends Phaser.Scene {
 
     preload() {
-        // HUD
-        this.load.image('healthBar', 'hudElements/healthBar.png');
-        this.load.image('ammoIcon', 'hudElements/ammoIcon.png');
-        this.load.image('ammoHover', 'hudElements/ammoHover.png');
-        this.load.image('infiniteAmmo', 'hudElements/infiniteAmmo.png');
-
+        
         // Player
         this.load.image('player', 'sprites/player/idle/idle-1.png');
         this.load.atlas('spritesPlayer', 'sprites/player/anim/player-anim.png', 'sprites/player/anim/player-anim-atlas.json');
         this.load.image('bullet', 'sprites/weapons/bullet.png');
-
+        
         // Enemy
         this.load.spritesheet('mummy','enemies/mummy37x45.png', {frameWidth:37, frameHeight:45});
-
+        
         // Items
         this.load.image('ammoPack', 'sprites/items/ammoPack.png');
         this.load.image('shootBoost', 'sprites/items/shootBoost.png');
         this.load.image('midAirJump', 'sprites/items/midAirJump.png');
-
+        
         // Environment
         this.load.image('portal', 'sprites/interactables/portal.png');
         this.load.image('tiles', 'Tileset.png');
         this.load.image('items', 'Items.png');
         this.load.tilemapTiledJSON('Mapa', 'Mapa.json');
-
+        
         this.load.spritesheet('tilesSprites', 'Tileset.png',
-            { frameWidth: 32, frameHeight: 32 });
-
+        { frameWidth: 32, frameHeight: 32 });
+        
         this.load.spritesheet('itemSprites', 'Items.png',
-            { frameWidth: 32, frameHeight: 32 });
-
+        { frameWidth: 32, frameHeight: 32 });
+        
+        // HUD
+        this.load.image('healthBar', 'hudElements/healthBar.png');
+        this.load.image('ammoIcon', 'hudElements/ammoIcon.png');
+        this.load.image('ammoHover', 'hudElements/ammoHover.png');
+        this.load.image('infiniteAmmo', 'hudElements/infiniteAmmo.png');
+        
         // Sounds
         this.load.audio('shoot', 'sounds/effects/shoot.mp3');
         this.load.audio('noAmmo', 'sounds/effects/noAmmo.mp3');
