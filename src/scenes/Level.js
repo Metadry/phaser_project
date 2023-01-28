@@ -197,8 +197,7 @@ export default class Level extends Phaser.Scene {
     }
 
     initHud() {
-        let hud = new Hud(this);
-        hud.create();
+        this.player.hud.create();
     }
 
     initMusic() {
@@ -243,7 +242,7 @@ export default class Level extends Phaser.Scene {
     }
 
     onCollisionMummy(player) {
-        this.player.receiveHit(2);
+        this.player.receiveHit(20);
     }
 
     onHit(mummy, object) {
