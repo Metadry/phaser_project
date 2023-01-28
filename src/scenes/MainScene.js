@@ -63,19 +63,23 @@ export default class PlayerPlayground extends Phaser.Scene {
         let ammoHover = this.add.image(135, 70, 'ammoHover').setScale(0.24, 0.25);
         let ammoIcon = this.add.image(29, 70, 'ammoIcon').setScale(0.12);
         
-        // Infinite Ammo icon
-        this.infiniteAmmo = this.physics.add.staticGroup();
-        this.infiniteAmmo.create(70, 151, 'infiniteAmmo').setScale(0.05);
-        this.infiniteAmmo.setVisible(false);
-
+        // HUD - InfiniteAmmoIcon
+        let infiniteAmmo = this.add.image(76, 72, 'infiniteAmmo').setScale(0.05);
+        
         // HUD - FIX TO CAMERA
         this.ammo.setScrollFactor(0);
         this.healthBar.setScrollFactor(0);
         ammoHover.setScrollFactor(0, 0);
         ammoIcon.setScrollFactor(0, 0);
         healthIcon.setScrollFactor(0, 0);
-        
+        infiniteAmmo.setScrollFactor(0, 0);
 
+        // HUD - SetVisible hudElements
+        infiniteAmmo.setVisible(false); // Set infiniteAmmo disabled by default
+        //ammoHover.setVisible(false);
+        //this.ammo.setVisible(false);
+        
+        // Player 
         this.player = new Player(this, 400, 200, 'player');
         this.cameras.main.startFollow(this.player);
 
@@ -143,13 +147,6 @@ export default class PlayerPlayground extends Phaser.Scene {
         this.sound.play('pickUp');
         ammoPack.disableBody(true, true);
         this.player.refillAmmo();
-        
-        // hud update
-        // this.ammo.clear();
-        // ammoHover.clear();
-        // this.ammo.fillStyle(0x00ff00, 1);
-        // this.ammo.fillRect(50, 140, 156, 20);
-        // this.ammoHover.create(130, 150, 'ammoHover').setScale(0.25);
     }
 
     enableShootBoost(player, shootBoost) {
