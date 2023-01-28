@@ -1,4 +1,11 @@
 { "compressionlevel":-1,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"json"
+        }
+    },
  "height":33,
  "infinite":false,
  "layers":[
@@ -1071,31 +1078,75 @@
         }, 
         {
          "draworder":"topdown",
+         "id":30,
+         "name":"MomiaSpawn",
+         "objects":[
+                {
+                 "height":32,
+                 "id":82,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":544,
+                 "y":928
+                }, 
+                {
+                 "height":32,
+                 "id":83,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":768,
+                 "y":928
+                }, 
+                {
+                 "height":32,
+                 "id":84,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1152,
+                 "y":800
+                }, 
+                {
+                 "height":32,
+                 "id":85,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1376,
+                 "y":768
+                }, 
+                {
+                 "height":32,
+                 "id":86,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":512,
+                 "y":224
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":29,
          "name":"MomiaObject",
          "objects":[
-                {
-                 "height":35,
-                 "id":66,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":36.5,
-                 "x":353,
-                 "y":223.5
-                }, 
-                {
-                 "height":35,
-                 "id":68,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":37.3333333333334,
-                 "x":665.666666666667,
-                 "y":222
-                }, 
                 {
                  "height":32,
                  "id":69,
@@ -1183,6 +1234,28 @@
                  "width":32,
                  "x":608,
                  "y":928
+                }, 
+                {
+                 "height":32,
+                 "id":87,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":320,
+                 "y":224
+                }, 
+                {
+                 "height":32,
+                 "id":88,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":672,
+                 "y":224
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1190,8 +1263,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":30,
- "nextobjectid":80,
+ "nextlayerid":31,
+ "nextobjectid":89,
  "orientation":"orthogonal",
  "parallaxoriginx":7,
  "parallaxoriginy":0,
