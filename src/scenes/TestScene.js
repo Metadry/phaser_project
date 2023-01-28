@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 import Portal from '../scripts/environment/Portal';
 import Player from '../scripts/player/Player'
-import MidAirJump from '../scripts/powerups/MidAirJump';
+import MidAirJump from '../scripts/items/MidAirJump';
 import Mummy from '../scripts/enemies/Mummy'
 
 export default class PlayerPlayground extends Phaser.Scene {

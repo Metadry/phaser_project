@@ -1,8 +1,6 @@
 import Phaser from 'phaser'
 
 import Level from './scenes/Level'
-import PlayerPlayground from './scenes/PlayerPlayground'
-import TestScene from './scenes/TestScene'
 
 const config = {
 	type: Phaser.AUTO,

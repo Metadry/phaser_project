@@ -85,9 +85,8 @@ export default class Level extends Phaser.Scene {
         //ammoHover.setVisible(false);
         //this.ammo.setVisible(false);
 
-
-        this.initObjects(map, layerForeground);
         this.initPlayer();
+        this.initObjects();
     }
 
     update() {
@@ -129,35 +128,36 @@ export default class Level extends Phaser.Scene {
         this.physics.add.collider(this.player.bulletStash, this.platforms, this.bulletHitBlock, null, this);
     }
 
-    initObjects(map, layerForeground) {
-        this.initConsumables(map);
-        this.initStatics(map);
+    initObjects() {
+        this.initConsumables();
+        this.initStatics();
+        this.initEnemies();
     }
 
-    initConsumables(map) {
+    initConsumables() {
         this.consumables = [];
 
-        map.getObjectLayer('AmmoObject')['objects'].forEach(ammoPackObject => {
+        this.map.getObjectLayer('AmmoObject')['objects'].forEach(ammoPackObject => {
             let ammoPack = new AmmoPack(this, ammoPackObject.x, ammoPackObject.y);
             this.physics.add.overlap(this.player, ammoPack, ammoPack.use, null, ammoPack);
             this.consumables.push(ammoPack);
         });
 
-        map.getObjectLayer('CollectableObject')['objects'].forEach(shootBoostObject => {
+        this.map.getObjectLayer('CollectableObject')['objects'].forEach(shootBoostObject => {
             let shootBoost = new ShootBoost(this, shootBoostObject.x, shootBoostObject.y);
             this.physics.add.overlap(this.player, shootBoost, shootBoost.use, null, shootBoost);
             this.consumables.push(shootBoost);
         });
     }
 
-    initStatics(map) {
-        map.getObjectLayer('DoubleJumpObject')['objects'].forEach(midAirJumpObject => {
+    initStatics() {
+        this.map.getObjectLayer('DoubleJumpObject')['objects'].forEach(midAirJumpObject => {
             let midAirJump = new MidAirJump(this, midAirJumpObject.x, midAirJumpObject.y);
             this.physics.add.overlap(this.player, midAirJump, midAirJump.use, null, midAirJump);
         });
 
         let portals = [];
-        map.getObjectLayer('PortalObject')['objects'].forEach(portalObject => {
+        this.map.getObjectLayer('PortalObject')['objects'].forEach(portalObject => {
             let portal = new Portal(this, portalObject.x, portalObject.y);
             this.physics.add.overlap(this.player, portal, portal.teleportPlayer, null, portal);
             this.physics.add.overlap(this.player.bulletStash, portal, portal.teleportObject, null, portal);
@@ -166,33 +166,27 @@ export default class Level extends Phaser.Scene {
 
         portals[0].setTeleportPoint(portals[1]);
         portals[1].setTeleportPoint(portals[0]);
-        this.mummyObjects = map.getObjectLayer('MomiaSpawn')['objects'];
+    }
+
+    initEnemies() {
+        this.mummyObjects = this.map.getObjectLayer('MomiaSpawn')['objects'];
         this.mummies = [];
         for (let i = 0; i < this.mummyObjects.length; i++) {
             let mummy = new Mummy(this, this.mummyObjects[i].x, this.mummyObjects[i].y, 'mummy');
-            this.physics.add.collider(mummy, layerForeground);
+            this.physics.add.collider(mummy, this.platforms);
             this.physics.add.collider(this.player, mummy, this.onCollisionMummy, null, this);
             this.physics.add.collider(this.player.bulletStash, mummy, this.onHit, null, this);
 
             this.mummies.push(mummy);
         }
 
-        this.mummyColliderObjects = map.getObjectLayer('MomiaObject')['objects'];
+        this.mummyColliderObjects = this.map.getObjectLayer('MomiaObject')['objects'];
         let position = 0;
         this.mummies.forEach(mummy => {
             mummy.limit1 = this.mummyColliderObjects[position].x;
             mummy.limit2 = this.mummyColliderObjects[position+1].x;
 
             position = position + 2;
-        });
-
-        for (let i = 0; i < this.mummyColliderObjects.length; i++) {
-            console.log(this.mummyColliderObjects[i].x);
-        }
-
-        this.mummies.forEach(mummy => {
-            console.log(mummy.limit1);
-            console.log(mummy.limit2);
         });
     }
 
@@ -201,16 +195,32 @@ export default class Level extends Phaser.Scene {
         bullet.stash();
     }
 
-    resetLevel(player) {
-        player.reset(this.start);
+    resetLevel() {
+        this.player.reset(this.start);
 
         // Reset used consumables
+        this.resetConsumables();
+
+        // Reset mummies
+        this.resetMummies();
+        
+    }
+
+    resetConsumables() {
         for (let i = 0; i < this.consumables.length; i++) {
             let consumable = this.consumables[i];
             if (consumable.active == false) {
                 consumable.enableBody(true, consumable.x, consumable.y, true, true);
             }
         }
+    }
+
+    resetMummies() {
+        this.mummies.forEach(mummy => {
+            mummy.destroy();
+        });
+
+        this.initEnemies();
     }
 
     teleport(bullet, portal) {
@@ -222,7 +232,7 @@ export default class Level extends Phaser.Scene {
     }
 
     onHit(mummy, object) {
-        //object.destroy(true);
+        object.stash();
         mummy.receiveHit(10);
     }
 

@@ -48,7 +48,7 @@ export default class Mummy extends Phaser.Physics.Arcade.Sprite{
             this.health -= damage;
 
             if (this.health <= 0) {
-                this.destroy();
+                this.disableBody(false, true);
             }
         }
     }
