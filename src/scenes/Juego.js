@@ -1,10 +1,13 @@
-import Player from "./scripts/player/Player";
+import Player from "../scripts/player/Player";
 
-class MainScene extends Phaser.Scene{
+export default class Juego extends Phaser.Scene{
 
     preload(){
+        this.load.image('tiles', 'public/Tileset.png');
         this.load.tilemapTiledJSON('Mapa', 'public/Mapa.json');
-        
+                
+        this.load.spritesheet('tilesSprites','public/Tileset.png',
+        { frameWidth: 32, frameHeight: 32 });
 
     }
 
@@ -12,7 +15,7 @@ class MainScene extends Phaser.Scene{
         this.add.tileSprite(0, 0, 2848, 1024, 'hg');
 
         var map = this.make.tilemap({ key: 'Mapa'});
-        var tiles = map.addTilesetImage('Tileset, tile');
+        var tiles = map.addTilesetImage('Mapa', 'tiles');
         var layerBackground = map.createLayer('Background', tiles, 0, 0);
         var layerForeground = map.createLayer('Foreground', tiles, 0, 0);
         var layerStairs = map.createLayer('Stairs', tiles, 0, 0);
@@ -28,10 +31,11 @@ class MainScene extends Phaser.Scene{
         var layerAmmo = map.createLayer('Ammo', tiles, 0, 0);
         var layerEndgame = map.createLayer('EndGame', tiles, 0, 0);
 
-        layerForeground.setCollisionByExclusion(-1,true);
+        // layerForeground.setCollisionByExclusion(-1,true);
 
         var player = new Player(this, 75, 50,'player');
         this.physics.add.collider(player, layerForeground);
+        // var musica = new Audio()
 
     }
 
