@@ -69,23 +69,23 @@ export default class Level extends Phaser.Scene {
 
         // HUD 
         // this.hud = new hudConfig(this, )
-        
+
         // HUD - HealthBar
         this.healthBar = this.add.graphics();
         this.healthBar.fillStyle(0x00ff00, 1);
         this.healthBar.fillRect(59, 20, 160, 20);
         let healthIcon = this.add.image(30, 30, 'healthBar').setScale(0.15);
-        
+
         // HUD - AmmoBar
         this.ammo = this.add.graphics();
         this.ammo.fillStyle(0xfd193e, 1);
         this.ammo.fillRect(59, 60, 150, 20); // Iteraciones por 30 puntos
         let ammoHover = this.add.image(135, 70, 'ammoHover').setScale(0.24, 0.25);
         let ammoIcon = this.add.image(29, 70, 'ammoIcon').setScale(0.12);
-        
+
         // HUD - InfiniteAmmoIcon
         let infiniteAmmo = this.add.image(76, 72, 'infiniteAmmo').setScale(0.05);
-        
+
         // HUD - FIX TO CAMERA
         this.ammo.setScrollFactor(0);
         this.healthBar.setScrollFactor(0);
@@ -106,7 +106,7 @@ export default class Level extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
         this.physics.add.collider(this.player, platforms);
-        this.physics.add.collider(this.player, deathPlatforms, this.player.reset, null, this.player);
+        this.physics.add.collider(this.player, deathPlatforms, this.resetLevel, null, this);
         this.physics.add.collider(this.player.bulletStash, platforms, this.bulletHitBlock, null, this);
 
         this.initObjects(map);
@@ -117,35 +117,41 @@ export default class Level extends Phaser.Scene {
     }
 
     initObjects(map) {
-        this.ammoPacks = map.getObjectLayer('AmmoObject')['objects'];
-        for (let i = 0; i < this.ammoPacks.length; i++) {
-            let ammoPack = new AmmoPack(this, this.ammoPacks[i].x, this.ammoPacks[i].y);
+        // Consumables
+        let ammoPackObjects = map.getObjectLayer('AmmoObject')['objects'];
+        this.ammoPacks = [];
+        for (let i = 0; i < ammoPackObjects.length; i++) {
+            let ammoPack = new AmmoPack(this, ammoPackObjects[i].x, ammoPackObjects[i].y);
             this.physics.add.overlap(this.player, ammoPack, ammoPack.use, null, ammoPack);
+            this.ammoPacks.push(ammoPack);
         }
 
-        this.shootBoosts = map.getObjectLayer('CollectableObject')['objects'];
-        for (let i = 0; i < this.shootBoosts.length; i++) {
-            let shootBoost = new ShootBoost(this, this.shootBoosts[i].x, this.shootBoosts[i].y);
+        let shootBoostObjects = map.getObjectLayer('CollectableObject')['objects'];
+        this.shootBoosts = [];
+        for (let i = 0; i < shootBoostObjects.length; i++) {
+            let shootBoost = new ShootBoost(this, shootBoostObjects[i].x, shootBoostObjects[i].y);
             this.physics.add.overlap(this.player, shootBoost, shootBoost.use, null, shootBoost);
+            this.shootBoosts.push(shootBoost);
         }
 
-        this.midAirJumps = map.getObjectLayer('DoubleJumpObject')['objects'];
-        for (let i = 0; i < this.midAirJumps.length; i++) {
-            let midAirJump = new MidAirJump(this, this.midAirJumps[i].x, this.midAirJumps[i].y);
+        // Statics
+        let midAirJumpObjects = map.getObjectLayer('DoubleJumpObject')['objects'];
+        for (let i = 0; i < midAirJumpObjects.length; i++) {
+            let midAirJump = new MidAirJump(this, midAirJumpObjects[i].x, midAirJumpObjects[i].y);
             this.physics.add.overlap(this.player, midAirJump, midAirJump.use, null, midAirJump);
         }
 
-        this.portalObjects = map.getObjectLayer('PortalObject')['objects'];
-        this.portals = [];
-        for (let i = 0; i < this.portalObjects.length; i++) {
-            let portal = new Portal(this, this.portalObjects[i].x, this.portalObjects[i].y);
+        let portalObjects = map.getObjectLayer('PortalObject')['objects'];
+        let portals = [];
+        for (let i = 0; i < portalObjects.length; i++) {
+            let portal = new Portal(this, portalObjects[i].x, portalObjects[i].y);
             this.physics.add.overlap(this.player, portal, portal.teleportPlayer, null, portal);
             //this.physics.add.overlap(this.player.bulletStash, portal, portal.teleportObject, null, this);
-            this.portals.push(portal);
+            portals.push(portal);
         }
 
-        this.portals[0].setTeleportPoint(this.portals[1]);
-        this.portals[1].setTeleportPoint(this.portals[0]);
+        portals[0].setTeleportPoint(portals[1]);
+        portals[1].setTeleportPoint(portals[0]);
     }
 
     // Collision functions
@@ -155,6 +161,25 @@ export default class Level extends Phaser.Scene {
 
     teleportObject(object, portal) {
         portal.teleport(object, 16);
+    }
+
+    resetLevel(player) {
+        player.reset(this.start);
+
+        // Reset consumables
+        for (let i = 0; i < this.ammoPacks.length; i++) {
+            let ammoPack = this.ammoPacks[i];
+            if (ammoPack.active == false) {
+                ammoPack.enableBody(true, ammoPack.x, ammoPack.y, true, true);
+            }
+        }
+
+        for (let i = 0; i < this.shootBoosts.length; i++) {
+            let shootBoost = this.shootBoosts[i];
+            if (shootBoost.active == false) {
+                shootBoost.enableBody(true, shootBoost.x, shootBoost.y, true, true);
+            }
+        }
     }
 
 }

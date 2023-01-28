@@ -263,11 +263,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.ammo = this.maxAmmo;
     }
 
-    reset() {
-        this.setX(this.scene.start.x);
-        this.setY(this.scene.start.y);
+    reset(position) {
+        this.setX(position.x);
+        this.setY(position.y);
         this.health = this.maxHealth;
         this.refillAmmo();
+
+        this.shootBoostEnabled = false;
+        this.midAirJumpEnabled = false;
     }
 
     isAlive() {
