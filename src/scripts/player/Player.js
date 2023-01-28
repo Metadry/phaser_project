@@ -1,4 +1,5 @@
 import BulletStash from './BulletStash'
+import hudConfig from '../hud/hudConfig'
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, spriteName) {

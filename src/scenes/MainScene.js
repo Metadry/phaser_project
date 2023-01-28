@@ -1,7 +1,9 @@
-import Phaser from 'phaser'
+import Phaser from 'phaser';
+import hudConfig from '../scripts/hud/hudConfig';
 import Portal from '../scripts/environment/Portal';
-import Player from '../scripts/player/Player'
+import Player from '../scripts/player/Player';
 import MidAirJump from '../scripts/powerups/MidAirJump';
+
 export default class PlayerPlayground extends Phaser.Scene {
     preload() {
         // Background
@@ -21,6 +23,12 @@ export default class PlayerPlayground extends Phaser.Scene {
         this.load.atlas('spritesPlayer', 'player_anim/player-anim.png', 'player_anim/player-anim-atlas.json');
         this.load.image('bullet', 'bullet.png');
 
+        // HUD
+        this.load.image('healthBar', 'hudElements/healthBar.png');
+        this.load.image('ammoIcon', 'hudElements/ammoIcon.png');
+        this.load.image('ammoHover', 'hudElements/ammoHover.png');
+        this.load.image('infiniteAmmo', 'hudElements/infiniteAmmo.png');
+
         // Sounds
         this.load.audio('shoot', 'sounds/effects/shoot.mp3');
         this.load.audio('noAmmo', 'sounds/effects/noAmmo.mp3');
@@ -39,7 +47,36 @@ export default class PlayerPlayground extends Phaser.Scene {
         this.platforms.create(-100, 500, 'ground');
         this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
 
-        this.player = new Player(this, 400, 300, 'player');
+        // HUD 
+        // this.hud = new hudConfig(this, )
+        
+        // HUD - HealthBar
+        this.healthBar = this.add.graphics();
+        this.healthBar.fillStyle(0x00ff00, 1);
+        this.healthBar.fillRect(59, 20, 160, 20);
+        let healthIcon = this.add.image(30, 30, 'healthBar').setScale(0.15);
+        
+        // HUD - AmmoBar
+        this.ammo = this.add.graphics();
+        this.ammo.fillStyle(0xfd193e, 1);
+        this.ammo.fillRect(59, 60, 150, 20); // Iteraciones por 30 puntos
+        let ammoHover = this.add.image(135, 70, 'ammoHover').setScale(0.24, 0.25);
+        let ammoIcon = this.add.image(29, 70, 'ammoIcon').setScale(0.12);
+        
+        // Infinite Ammo icon
+        this.infiniteAmmo = this.physics.add.staticGroup();
+        this.infiniteAmmo.create(70, 151, 'infiniteAmmo').setScale(0.05);
+        this.infiniteAmmo.setVisible(false);
+
+        // HUD - FIX TO CAMERA
+        this.ammo.setScrollFactor(0);
+        this.healthBar.setScrollFactor(0);
+        ammoHover.setScrollFactor(0, 0);
+        ammoIcon.setScrollFactor(0, 0);
+        healthIcon.setScrollFactor(0, 0);
+        
+
+        this.player = new Player(this, 400, 200, 'player');
         this.cameras.main.startFollow(this.player);
 
         this.ammoPacks = this.physics.add.group({
@@ -106,6 +143,13 @@ export default class PlayerPlayground extends Phaser.Scene {
         this.sound.play('pickUp');
         ammoPack.disableBody(true, true);
         this.player.refillAmmo();
+        
+        // hud update
+        // this.ammo.clear();
+        // ammoHover.clear();
+        // this.ammo.fillStyle(0x00ff00, 1);
+        // this.ammo.fillRect(50, 140, 156, 20);
+        // this.ammoHover.create(130, 150, 'ammoHover').setScale(0.25);
     }
 
     enableShootBoost(player, shootBoost) {
