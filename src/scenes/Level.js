@@ -109,8 +109,6 @@ export default class Level extends Phaser.Scene {
         this.map.createLayer('Detail', tiles, 0, 0);
         this.map.createLayer('Detail2', tiles, 0, 0);
         this.map.createLayer('Detail3', tiles, 0, 0);
-        this.map.createLayer('TilesMoveV', tiles, 0, 0);
-        this.map.createLayer('TilesMoveH', tiles, 0, 0);
         this.map.createLayer('EndGame', tiles, 0, 0);
 
         this.platforms.setCollisionByExclusion(-1, true);
