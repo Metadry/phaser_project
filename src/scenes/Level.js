@@ -3,6 +3,7 @@ import AmmoPack from "../scripts/items/AmmoPack";
 import ShootBoost from "../scripts/items/ShootBoost";
 import MidAirJump from "../scripts/items/MidAirJump";
 import Portal from "../scripts/environment/Portal";
+import Mummy from '../scripts/enemies/Mummy'
 
 export default class Level extends Phaser.Scene {
 
@@ -11,6 +12,9 @@ export default class Level extends Phaser.Scene {
         this.load.image('player', 'sprites/player/idle/idle-1.png');
         this.load.atlas('spritesPlayer', 'sprites/player/anim/player-anim.png', 'sprites/player/anim/player-anim-atlas.json');
         this.load.image('bullet', 'sprites/weapons/bullet.png');
+
+        // Enemy
+        this.load.spritesheet('mummy','enemies/mummy37x45.png', {frameWidth:37, frameHeight:45});
 
         // Items
         this.load.image('ammoPack', 'sprites/items/ammoPack.png');
@@ -82,12 +86,15 @@ export default class Level extends Phaser.Scene {
         //this.ammo.setVisible(false);
 
 
+        this.initObjects(map, layerForeground);
         this.initPlayer();
-        this.initObjects(this.map);
     }
 
     update() {
         this.player.update();
+        this.mummies.forEach(mummy => {
+            mummy.update();
+        });
     }
 
     loadMap() {
@@ -122,7 +129,7 @@ export default class Level extends Phaser.Scene {
         this.physics.add.collider(this.player.bulletStash, this.platforms, this.bulletHitBlock, null, this);
     }
 
-    initObjects(map) {
+    initObjects(map, layerForeground) {
         this.initConsumables(map);
         this.initStatics(map);
     }
@@ -159,6 +166,34 @@ export default class Level extends Phaser.Scene {
 
         portals[0].setTeleportPoint(portals[1]);
         portals[1].setTeleportPoint(portals[0]);
+        this.mummyObjects = map.getObjectLayer('MomiaSpawn')['objects'];
+        this.mummies = [];
+        for (let i = 0; i < this.mummyObjects.length; i++) {
+            let mummy = new Mummy(this, this.mummyObjects[i].x, this.mummyObjects[i].y, 'mummy');
+            this.physics.add.collider(mummy, layerForeground);
+            this.physics.add.collider(this.player, mummy, this.onCollisionMummy, null, this);
+            this.physics.add.collider(this.player.bulletStash, mummy, this.onHit, null, this);
+
+            this.mummies.push(mummy);
+        }
+
+        this.mummyColliderObjects = map.getObjectLayer('MomiaObject')['objects'];
+        let position = 0;
+        this.mummies.forEach(mummy => {
+            mummy.limit1 = this.mummyColliderObjects[position].x;
+            mummy.limit2 = this.mummyColliderObjects[position+1].x;
+
+            position = position + 2;
+        });
+
+        for (let i = 0; i < this.mummyColliderObjects.length; i++) {
+            console.log(this.mummyColliderObjects[i].x);
+        }
+
+        this.mummies.forEach(mummy => {
+            console.log(mummy.limit1);
+            console.log(mummy.limit2);
+        });
     }
 
     // Collision functions
@@ -176,6 +211,19 @@ export default class Level extends Phaser.Scene {
                 consumable.enableBody(true, consumable.x, consumable.y, true, true);
             }
         }
+    }
+
+    teleport(bullet, portal) {
+        portal.teleport(bullet, 16);
+    }
+
+    onCollisionMummy(player) {
+        this.player.receiveHit(2);
+    }
+
+    onHit(mummy, object) {
+        //object.destroy(true);
+        mummy.receiveHit(10);
     }
 
 }

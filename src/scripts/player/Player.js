@@ -31,6 +31,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.shootBoostEnabled = false;
         this.midAirJumpEnabled = false;
 
+        // Direction
+        this.direction = -1;
+
         // Colliders
         this.setSize(28, 50);
         this.setOffset(22.5, 16);
@@ -152,10 +155,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         if (this.cursors.left.isDown) {
             this.setFlipX(true);
+            this.direction = 1;
             this.setVelocityX(-this.speed);
         }
         else if (this.cursors.right.isDown) {
             this.setFlipX(false);
+            this.direction = -1;
             this.setVelocityX(this.speed);
         }
         else {
@@ -248,7 +253,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     receiveHit(damage) {
         if (!this.receivingHit && this.health > 0) {
-            this.setVelocity(this.body.velocity.x / 4, this.body.velocity.y / 4);
+            this.setVelocity(this.speed * 0.7 * this.direction, this.body.velocity.y * -0.7);
             this.receivingHit = true;
             this.shootBoostEnabled = false;
 
