@@ -1,5 +1,6 @@
-export default class Hud {
+export default class Hud extends Phaser.Physics.Arcade.Sprite {
     constructor(scene){
+        super(scene);
         this.scene = scene;
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
