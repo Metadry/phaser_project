@@ -49,6 +49,12 @@ export default class Hud {
         this.healthBar.fillRect(59, 20, (currentHealth/maxHealth)*100, 20);
     }
 
+    setMaxAmmo(){
+        this.ammo.clear();
+        this.ammo.fillStyle(0xfd193e, 1);
+        this.ammo.fillRect(59, 60, 150, 20);
+    }
+
     setinfiniteAmmo(){
         this.ammoHover.setVisible(false);
         this.ammo.setVisible(false);
