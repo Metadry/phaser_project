@@ -4,8 +4,8 @@ import Juego from './scenes/Juego'
 
 const config = {
 	type: Phaser.AUTO,
-	width: 800,
-	height: 600,
+	width: 1920,
+	height: 1080,
 	physics: {
 		default: 'arcade',
 		arcade: {
