@@ -22,6 +22,9 @@ export default class Level extends Phaser.Scene {
         this.load.image('ammoPack', 'sprites/items/ammoPack.png');
         this.load.image('shootBoost', 'sprites/items/shootBoost.png');
         this.load.image('midAirJump', 'sprites/items/midAirJump.png');
+
+        // Traps
+        this.load.image('trap', 'sprites/environment/trap.png');
         
         // Environment
         this.load.image('portal', 'sprites/interactables/portal.png');
@@ -56,11 +59,13 @@ export default class Level extends Phaser.Scene {
     }
 
     create() {
+        this.initMusic();
         this.loadMap();
         this.initPlayer();
+        this.initEnemies();
         this.initObjects();
+        this.initTraps();
         this.initHud();
-        this.sound.play('phaserMusic');
     }
 
     update() {
@@ -103,7 +108,6 @@ export default class Level extends Phaser.Scene {
     initObjects() {
         this.initConsumables();
         this.initStatics();
-        this.initEnemies();
     }
 
     initConsumables() {
@@ -162,9 +166,17 @@ export default class Level extends Phaser.Scene {
         });
     }
 
-    initHud(){
+    initTraps() {
+
+    }
+
+    initHud() {
         let hud = new Hud(this);
         hud.create();
+    }
+
+    initMusic() {
+        this.sound.play('phaserMusic', {volume: 0.2});
     }
 
     // Collision functions
