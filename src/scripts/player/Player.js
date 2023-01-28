@@ -242,6 +242,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             if (this.ammo > 0 || this.shootBoostEnabled) {
                 if (!this.shootBoostEnabled) {
                     this.ammo -= 1;
+                    this.hud.updateAmmoBar(this.ammo);
                 }
 
                 this.scene.sound.play('shoot');
@@ -284,6 +285,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.health = this.maxHealth;
         this.refillAmmo();
+        this.hud.updateHealthBar(160);
+        this.hud.setMaxAmmo();
 
         this.shootBoostEnabled = false;
         this.midAirJumpEnabled = false;
