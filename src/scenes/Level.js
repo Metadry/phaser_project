@@ -23,6 +23,12 @@ export default class Level extends Phaser.Scene {
         this.load.image('items', 'Items.png');
         this.load.tilemapTiledJSON('Mapa', 'Mapa.json');
 
+        // HUD
+        this.load.image('healthBar', 'hudElements/healthBar.png');
+        this.load.image('ammoIcon', 'hudElements/ammoIcon.png');
+        this.load.image('ammoHover', 'hudElements/ammoHover.png');
+        this.load.image('infiniteAmmo', 'hudElements/infiniteAmmo.png');
+
         this.load.spritesheet('tilesSprites', 'Tileset.png',
             { frameWidth: 32, frameHeight: 32 });
 
@@ -61,6 +67,39 @@ export default class Level extends Phaser.Scene {
         platforms.setCollisionByExclusion(-1, true);
         deathPlatforms.setCollisionByExclusion(-1, true);
 
+        // HUD 
+        // this.hud = new hudConfig(this, )
+        
+        // HUD - HealthBar
+        this.healthBar = this.add.graphics();
+        this.healthBar.fillStyle(0x00ff00, 1);
+        this.healthBar.fillRect(59, 20, 160, 20);
+        let healthIcon = this.add.image(30, 30, 'healthBar').setScale(0.15);
+        
+        // HUD - AmmoBar
+        this.ammo = this.add.graphics();
+        this.ammo.fillStyle(0xfd193e, 1);
+        this.ammo.fillRect(59, 60, 150, 20); // Iteraciones por 30 puntos
+        let ammoHover = this.add.image(135, 70, 'ammoHover').setScale(0.24, 0.25);
+        let ammoIcon = this.add.image(29, 70, 'ammoIcon').setScale(0.12);
+        
+        // HUD - InfiniteAmmoIcon
+        let infiniteAmmo = this.add.image(76, 72, 'infiniteAmmo').setScale(0.05);
+        
+        // HUD - FIX TO CAMERA
+        this.ammo.setScrollFactor(0);
+        this.healthBar.setScrollFactor(0);
+        ammoHover.setScrollFactor(0, 0);
+        ammoIcon.setScrollFactor(0, 0);
+        healthIcon.setScrollFactor(0, 0);
+        infiniteAmmo.setScrollFactor(0, 0);
+
+        // HUD - SetVisible hudElements
+        infiniteAmmo.setVisible(false); // Set infiniteAmmo disabled by default
+        //ammoHover.setVisible(false);
+        //this.ammo.setVisible(false);
+
+        // Player init
         this.start = { x: 100, y: 450 };
         this.player = new Player(this, this.start.x, this.start.y, 'player');
         this.cameras.main.startFollow(this.player);
