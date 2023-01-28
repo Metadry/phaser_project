@@ -43,11 +43,17 @@ export default class Juego extends Phaser.Scene{
 
         var player = new Player(this, 100, 450,'player');
         this.physics.add.collider(player, layerForeground);
-        // var musica = new Audio()
+        // var musica = new Audio('phaserMusic')
+        // musica.play();
+
+        
 
     }
 
     update(){
+        if(this.input.keyboard.addKey('space')){
+            
+        }
 
     }
 
