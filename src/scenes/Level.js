@@ -18,7 +18,7 @@ export default class Level extends Phaser.Scene {
         this.load.image('midAirJump', 'sprites/items/midAirJump.png');
 
         // Environment
-        this.load.image('portal', 'sprites/environment/portal.png');
+        this.load.image('portal', 'sprites/interactables/portal.png');
         this.load.image('tiles', 'Tileset.png');
         this.load.image('items', 'Items.png');
         this.load.tilemapTiledJSON('Mapa', 'Mapa.json');
