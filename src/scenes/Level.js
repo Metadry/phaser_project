@@ -3,11 +3,18 @@ import AmmoPack from "../scripts/items/AmmoPack";
 import ShootBoost from "../scripts/items/ShootBoost";
 import MidAirJump from "../scripts/items/MidAirJump";
 import Portal from "../scripts/environment/Portal";
-import Mummy from '../scripts/enemies/Mummy'
+import Mummy from '../scripts/enemies/Mummy';
+import Hud from "../scripts/hud/hudConfig";
 
 export default class Level extends Phaser.Scene {
 
     preload() {
+        // HUD
+        this.load.image('healthBar', 'hudElements/healthBar.png');
+        this.load.image('ammoIcon', 'hudElements/ammoIcon.png');
+        this.load.image('ammoHover', 'hudElements/ammoHover.png');
+        this.load.image('infiniteAmmo', 'hudElements/infiniteAmmo.png');
+
         // Player
         this.load.image('player', 'sprites/player/idle/idle-1.png');
         this.load.atlas('spritesPlayer', 'sprites/player/anim/player-anim.png', 'sprites/player/anim/player-anim-atlas.json');
@@ -33,12 +40,6 @@ export default class Level extends Phaser.Scene {
         this.load.spritesheet('itemSprites', 'Items.png',
             { frameWidth: 32, frameHeight: 32 });
 
-        // HUD
-        this.load.image('healthBar', 'hudElements/healthBar.png');
-        this.load.image('ammoIcon', 'hudElements/ammoIcon.png');
-        this.load.image('ammoHover', 'hudElements/ammoHover.png');
-        this.load.image('infiniteAmmo', 'hudElements/infiniteAmmo.png');
-
         // Sounds
         this.load.audio('shoot', 'sounds/effects/shoot.mp3');
         this.load.audio('noAmmo', 'sounds/effects/noAmmo.mp3');
@@ -52,41 +53,9 @@ export default class Level extends Phaser.Scene {
 
     create() {
         this.loadMap();
-
-        // HUD 
-        // this.hud = new hudConfig(this, )
-
-        // HUD - HealthBar
-        this.healthBar = this.add.graphics();
-        this.healthBar.fillStyle(0x00ff00, 1);
-        this.healthBar.fillRect(59, 20, 160, 20);
-        let healthIcon = this.add.image(30, 30, 'healthBar').setScale(0.15);
-
-        // HUD - AmmoBar
-        this.ammo = this.add.graphics();
-        this.ammo.fillStyle(0xfd193e, 1);
-        this.ammo.fillRect(59, 60, 150, 20); // Iteraciones por 30 puntos
-        let ammoHover = this.add.image(135, 70, 'ammoHover').setScale(0.24, 0.25);
-        let ammoIcon = this.add.image(29, 70, 'ammoIcon').setScale(0.12);
-
-        // HUD - InfiniteAmmoIcon
-        let infiniteAmmo = this.add.image(76, 72, 'infiniteAmmo').setScale(0.05);
-
-        // HUD - FIX TO CAMERA
-        this.ammo.setScrollFactor(0);
-        this.healthBar.setScrollFactor(0);
-        ammoHover.setScrollFactor(0, 0);
-        ammoIcon.setScrollFactor(0, 0);
-        healthIcon.setScrollFactor(0, 0);
-        infiniteAmmo.setScrollFactor(0, 0);
-
-        // HUD - SetVisible hudElements
-        infiniteAmmo.setVisible(false); // Set infiniteAmmo disabled by default
-        //ammoHover.setVisible(false);
-        //this.ammo.setVisible(false);
-
         this.initPlayer();
         this.initObjects();
+        this.initHud();
     }
 
     update() {
@@ -188,6 +157,11 @@ export default class Level extends Phaser.Scene {
 
             position = position + 2;
         });
+    }
+
+    initHud(){
+        let hud = new Hud(this);
+        hud.create();
     }
 
     // Collision functions

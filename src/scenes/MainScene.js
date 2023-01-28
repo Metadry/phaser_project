@@ -46,7 +46,11 @@ export default class PlayerPlayground extends Phaser.Scene {
         this.platforms.create(400, 430, 'ground');
         this.platforms.create(-100, 500, 'ground');
         this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
-
+        
+        // Player 
+        this.player = new Player(this, 400, 200, 'player');
+        this.cameras.main.startFollow(this.player);
+        
         // HUD 
         // this.hud = new hudConfig(this, )
 
@@ -79,9 +83,6 @@ export default class PlayerPlayground extends Phaser.Scene {
         //ammoHover.setVisible(false);
         //this.ammo.setVisible(false);
 
-        // Player 
-        this.player = new Player(this, 400, 200, 'player');
-        this.cameras.main.startFollow(this.player);
 
         this.ammoPacks = this.physics.add.group({
             key: 'ammoPack',
