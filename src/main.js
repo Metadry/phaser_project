@@ -1,10 +1,6 @@
 import Phaser from 'phaser'
-<<<<<<< Updated upstream
-
 import Level from './scenes/Level'
-=======
-import MainScene from './scenes/MainScene'
->>>>>>> Stashed changes
+// import MainScene from './scenes/MainScene'
 
 const config = {
 	type: Phaser.AUTO,
@@ -16,11 +12,8 @@ const config = {
 			gravity: { y: 200 }
 		}
 	},
-<<<<<<< Updated upstream
 	scene: [Level]
-=======
-	scene: [MainScene]
->>>>>>> Stashed changes
+	// scene: [MainScene]
 }
 
 export default new Phaser.Game(config)

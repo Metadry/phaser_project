@@ -8,4 +8,8 @@ export default class Hud extends Phaser.Physics.Arcade.Sprite {
         this.hudlLayer = this.scene.physics.add.group(); 
 
     }
+
+    updateAmmoBar(){
+        
+    }
 }
