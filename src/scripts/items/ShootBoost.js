@@ -10,6 +10,8 @@ export default class AmmoPack extends Phaser.Physics.Arcade.Sprite {
     use() {
         this.scene.sound.play('pickUpBoost');
         this.disableBody(true, true);
+        this.scene.player.refillAmmo();
         this.scene.player.shootBoostEnabled = true;
+        this.scene.player.hud.setinfiniteAmmo();
     }
 }

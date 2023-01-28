@@ -13,8 +13,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.shootBtn = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
 
         // Stats
-        this.health = 10;
-        this.maxHealth = 10;
+        this.health = 160;
+        this.maxHealth = 160;
         this.ammo = 5;
         this.maxAmmo = 5;
         this.speed = 200;
@@ -22,7 +22,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.maxSpeed = 400;
         this.jumpSpeed = 265;
         this.bulletStash = new BulletStash(this.scene, 15, -200, 300);
-        this.hud = new Hud(this.scene);
+        this.hud = new Hud(scene);
         this.shotDelay = 500;
         this.nextShot = 0;
 
@@ -259,7 +259,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.setVelocity(this.speed * 0.7 * this.direction, this.body.velocity.y * -0.7);
             this.receivingHit = true;
             this.shootBoostEnabled = false;
-
+            this.hud.notInfinite();
             this.health -= damage;
             
             if (this.health <= 0) {
@@ -287,6 +287,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.refillAmmo();
         this.hud.updateHealthBar(160);
         this.hud.setMaxAmmo();
+        this.hud.notInfinite();
 
         this.shootBoostEnabled = false;
         this.midAirJumpEnabled = false;

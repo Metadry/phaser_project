@@ -44,24 +44,30 @@ export default class Hud extends Phaser.Physics.Arcade.Sprite {
         this.ammo.fillRect(59, 60, currentAmmo*30, 20);
         this.ammo.setScrollFactor(0);
     }
-
+    
     updateHealthBar(currentHealth){
         this.healthBar.clear();
         this.healthBar.fillStyle(0x00ff00, 1);
         this.healthBar.fillRect(59, 20, currentHealth, 20);
         this.healthBar.setScrollFactor(0);
     }
-
+    
     setMaxAmmo(){
         this.ammo.clear();
         this.ammo.fillStyle(0xfd193e, 1);
         this.ammo.fillRect(59, 60, 150, 20);
         this.ammo.setScrollFactor(0);
     }
-
+    
     setinfiniteAmmo(){
         this.ammoHover.setVisible(false);
         this.ammo.setVisible(false);
         this.infiniteAmmo.setVisible(true);
+    }
+    
+    notInfinite(){
+        this.ammoHover.setVisible(true);
+        this.ammo.setVisible(true);
+        this.infiniteAmmo.setVisible(false);
     }
 }
