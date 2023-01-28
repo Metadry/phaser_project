@@ -6,7 +6,6 @@ import Portal from "../scripts/environment/Portal";
 import Mummy from '../scripts/enemies/Mummy';
 import TrapH from '../scripts/environment/TrapH';
 import TrapV from '../scripts/environment/TrapV';
-import Hud from "../scripts/hud/hudConfig";
 import Win from "./Win";
 
 export default class Level extends Phaser.Scene {
@@ -185,12 +184,14 @@ export default class Level extends Phaser.Scene {
 
         this.map.getObjectLayer('TilesMoveVObject')['objects'].forEach(traps => {
             let trap = new TrapV(this, traps.x + 15, traps.y - 75);
+            this.physics.add.collider(this.player.bulletStash, trap, this.bulletHitTrap, null, this);
             this.physics.add.collider(this.player, trap, this.onCrash, null, this);
             this.traps.push(trap);
         });
 
         this.map.getObjectLayer('TilesMoveHObject')['objects'].forEach(traps => {
             let trap = new TrapH(this, traps.x + 25, traps.y);
+            this.physics.add.collider(this.player.bulletStash, trap, this.bulletHitTrap, null, this);
             this.physics.add.collider(this.player, trap, this.onCrash, null, this);
             this.traps.push(trap);
         });
@@ -206,6 +207,10 @@ export default class Level extends Phaser.Scene {
 
     // Collision functions
     bulletHitBlock(bullet) {
+        bullet.stash();
+    }
+
+    bulletHitTrap(block, bullet) {
         bullet.stash();
     }
 
@@ -251,7 +256,7 @@ export default class Level extends Phaser.Scene {
     }
 
     onCrash() {
-        this.player.receiveHit(2);
+        this.player.receiveHit(10);
     }
 
     win() {

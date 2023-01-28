@@ -1,5 +1,5 @@
 import BulletStash from './BulletStash'
-import Hud from '../hud/hudConfig'
+import Hud from '../hud/Hud'
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, spriteName) {
@@ -150,7 +150,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.speedControl();
 
         if (this.onAir && this.body.onFloor()) {
-            this.scene.sound.play('ground');
+            this.scene.sound.play('ground', {volume: 0.2});
         }
 
         this.onAir = !this.body.onFloor();
@@ -199,7 +199,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     jump() {
         if (Phaser.Input.Keyboard.JustDown(this.jumpBtn) && (this.body.onFloor() || this.midAirJumpEnabled)) {
-            this.scene.sound.play('jump');
+            this.scene.sound.play('jump', {volume: 0.2});
             this.setVelocityY(-this.jumpSpeed);
             this.anims.play('jump', true);
             this.midAirJumpEnabled = false;
@@ -245,11 +245,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                     this.hud.updateAmmoBar(this.ammo);
                 }
 
-                this.scene.sound.play('shoot');
+                this.scene.sound.play('shoot', {volume: 0.2});
                 this.bulletStash.fire(this.x, this.y, this.flipX);
             }
             else {
-                this.scene.sound.play('noAmmo');
+                this.scene.sound.play('noAmmo', {volume: 0.2});
             }
         }
     }
@@ -265,10 +265,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             if (this.health <= 0) {
                 this.setVelocity(0);
             } else{
-                this.hud.updateHealthBar(this.health, 150);
+                this.hud.updateHealthBar(this.health);
             }
 
-            this.scene.sound.play('hurt');
+            this.scene.sound.play('hurt', {volume: 0.2});
             this.anims.play('hurt', true);
         }
     }
