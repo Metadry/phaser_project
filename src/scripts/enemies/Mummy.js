@@ -9,7 +9,7 @@ export default class Mummy extends Phaser.Physics.Arcade.Sprite{
 
         // Stats
         this.health = 10;
-        this.speed = 100;
+        this.speed = 75;
 
         this.scene.anims.create(
             {

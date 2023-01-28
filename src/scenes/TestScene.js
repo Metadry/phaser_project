@@ -25,21 +25,9 @@ export default class PlayerPlayground extends Phaser.Scene {
 
         // Enemy
         this.load.spritesheet('mummy','mummy37x45.png', {frameWidth:37, frameHeight:45});
-
-        // TileMap
-        /*this.load.image('tile', 'Tileset.png');
-        this.load.tilemapTiledJSON('map', 'Map.json');*/
     }
 
     create() {
-        // TileMap
-        /*var map = this.make.tilemap({ key: 'map' });
-        var tiles = map.addTilesetImage('Plataformas', 'tile');
-        var layer = map.createLayer('Fondo', tiles, 0, 0);
-        var layer2 = map.createLayer('Suelo', tiles, 0, 0);
-
-        layer2.setCollisionByExclusion([-1], true);*/
-
         this.add.image(400, 300, 'sky')
         this.platforms = this.physics.add.staticGroup();
         this.platforms.create(400, 430, 'ground');
@@ -80,13 +68,6 @@ export default class PlayerPlayground extends Phaser.Scene {
         });
 
         this.initPortals();
-
-        // TileMap
-        /*this.physics.add.collider(this.player, layer2);
-        this.physics.add.collider(this.ammoPacks, layer2);
-        this.physics.add.collider(this.shootBoosts, layer2);
-        this.physics.add.collider(this.portals, layer2);
-        this.physics.add.collider(this.mummy, layer2);*/
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.ammoPacks, this.platforms);
@@ -150,7 +131,7 @@ export default class PlayerPlayground extends Phaser.Scene {
     }
 
     onHit(object, mummy) {
-        this.player.bulletStash.destroy(true);
-        this.mummy.receiveHit(5);
+        object.destroy(true);
+        this.mummy.receiveHit(10);
     }
 }
