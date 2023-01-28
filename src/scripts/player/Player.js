@@ -1,5 +1,4 @@
 import BulletStash from './BulletStash'
-import hudConfig from '../hud/hudConfig'
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, spriteName) {
@@ -113,10 +112,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
-        if (!this.receivingHit && this.isAlive()) {
-            this.move();
-            this.jump();
-            this.shoot();
+        if (this.isAlive()) {
+            if (!this.receivingHit) {
+                this.move();
+                this.jump();
+                this.shoot();
+            }
+        }
+        else {
+            this.scene.resetLevel();
         }
     }
 
@@ -264,8 +268,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     reset(position) {
+        this.setVelocity(0);
         this.setX(position.x);
         this.setY(position.y);
+
         this.health = this.maxHealth;
         this.refillAmmo();
 

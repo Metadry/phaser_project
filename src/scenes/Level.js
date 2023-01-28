@@ -1,39 +1,39 @@
 import Player from "../scripts/player/Player";
-import AmmoPack from "../scripts/powerups/AmmoPack";
-import ShootBoost from "../scripts/powerups/ShootBoost";
-import MidAirJump from "../scripts/powerups/MidAirJump";
+import AmmoPack from "../scripts/items/AmmoPack";
+import ShootBoost from "../scripts/items/ShootBoost";
+import MidAirJump from "../scripts/items/MidAirJump";
 import Portal from "../scripts/environment/Portal";
 
 export default class Level extends Phaser.Scene {
 
     preload() {
         // Player
-        this.load.image('player', 'player/idle/idle-1.png');
-        this.load.atlas('spritesPlayer', 'player_anim/player-anim.png', 'player_anim/player-anim-atlas.json');
-        this.load.image('bullet', 'bullet.png');
+        this.load.image('player', 'sprites/player/idle/idle-1.png');
+        this.load.atlas('spritesPlayer', 'sprites/player/anim/player-anim.png', 'sprites/player/anim/player-anim-atlas.json');
+        this.load.image('bullet', 'sprites/weapons/bullet.png');
 
         // Items
-        this.load.image('ammoPack', 'items/ammoPack.png');
-        this.load.image('shootBoost', 'items/shootBoost.png');
-        this.load.image('midAirJump', 'items/midAirJump.png');
+        this.load.image('ammoPack', 'sprites/items/ammoPack.png');
+        this.load.image('shootBoost', 'sprites/items/shootBoost.png');
+        this.load.image('midAirJump', 'sprites/items/midAirJump.png');
 
         // Environment
-        this.load.image('portal', 'environment/portal.png');
+        this.load.image('portal', 'sprites/environment/portal.png');
         this.load.image('tiles', 'Tileset.png');
         this.load.image('items', 'Items.png');
         this.load.tilemapTiledJSON('Mapa', 'Mapa.json');
-
-        // HUD
-        this.load.image('healthBar', 'hudElements/healthBar.png');
-        this.load.image('ammoIcon', 'hudElements/ammoIcon.png');
-        this.load.image('ammoHover', 'hudElements/ammoHover.png');
-        this.load.image('infiniteAmmo', 'hudElements/infiniteAmmo.png');
 
         this.load.spritesheet('tilesSprites', 'Tileset.png',
             { frameWidth: 32, frameHeight: 32 });
 
         this.load.spritesheet('itemSprites', 'Items.png',
             { frameWidth: 32, frameHeight: 32 });
+
+        // HUD
+        this.load.image('healthBar', 'hudElements/healthBar.png');
+        this.load.image('ammoIcon', 'hudElements/ammoIcon.png');
+        this.load.image('ammoHover', 'hudElements/ammoHover.png');
+        this.load.image('infiniteAmmo', 'hudElements/infiniteAmmo.png');
 
         // Sounds
         this.load.audio('shoot', 'sounds/effects/shoot.mp3');
@@ -44,28 +44,10 @@ export default class Level extends Phaser.Scene {
         this.load.audio('ground', 'sounds/effects/ground.mp3');
         this.load.audio('hurt', 'sounds/effects/hurt.mp3');
         this.load.audio('teleport', 'sounds/effects/teleport.mp3');
-
     }
 
     create() {
-        this.add.tileSprite(0, 0, 2848, 1024, 'hg');
-
-        var map = this.make.tilemap({ key: 'Mapa' });
-        var tiles = map.addTilesetImage('Mapa', 'tiles');
-
-        map.createLayer('BackGround', tiles, 0, 0);
-        var platforms = map.createLayer('Foreground', tiles, 0, 0);
-        map.createLayer('Stairs', tiles, 0, 0);
-        var deathPlatforms = map.createLayer('TilesDeath', tiles, 0, 0);
-        map.createLayer('Detail', tiles, 0, 0);
-        map.createLayer('Detail2', tiles, 0, 0);
-        map.createLayer('Detail3', tiles, 0, 0);
-        var layerTilesMoveV = map.createLayer('TilesMoveV', tiles, 0, 0);
-        var layerTilesMoveH = map.createLayer('TilesMoveH', tiles, 0, 0);
-        var layerEndgame = map.createLayer('EndGame', tiles, 0, 0);
-
-        platforms.setCollisionByExclusion(-1, true);
-        deathPlatforms.setCollisionByExclusion(-1, true);
+        this.loadMap();
 
         // HUD 
         // this.hud = new hudConfig(this, )
@@ -99,85 +81,99 @@ export default class Level extends Phaser.Scene {
         //ammoHover.setVisible(false);
         //this.ammo.setVisible(false);
 
-        // Player init
-        this.start = { x: 100, y: 450 };
-        this.player = new Player(this, this.start.x, this.start.y, 'player');
-        this.cameras.main.startFollow(this.player);
-        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
-        this.physics.add.collider(this.player, platforms);
-        this.physics.add.collider(this.player, deathPlatforms, this.resetLevel, null, this);
-        this.physics.add.collider(this.player.bulletStash, platforms, this.bulletHitBlock, null, this);
-
-        this.initObjects(map);
+        this.initPlayer();
+        this.initObjects(this.map);
     }
 
     update() {
         this.player.update();
     }
 
+    loadMap() {
+        this.add.tileSprite(0, 0, 2848, 1024, 'bg');
+
+        this.map = this.make.tilemap({ key: 'Mapa' });
+        let tiles = this.map.addTilesetImage('Mapa', 'tiles');
+
+        this.map.createLayer('BackGround', tiles, 0, 0);
+        this.platforms = this.map.createLayer('Foreground', tiles, 0, 0);
+        this.map.createLayer('Stairs', tiles, 0, 0);
+        this.deathPlatforms = this.map.createLayer('TilesDeath', tiles, 0, 0);
+        this.map.createLayer('Detail', tiles, 0, 0);
+        this.map.createLayer('Detail2', tiles, 0, 0);
+        this.map.createLayer('Detail3', tiles, 0, 0);
+        this.map.createLayer('TilesMoveV', tiles, 0, 0);
+        this.map.createLayer('TilesMoveH', tiles, 0, 0);
+        this.map.createLayer('EndGame', tiles, 0, 0);
+
+        this.platforms.setCollisionByExclusion(-1, true);
+        this.deathPlatforms.setCollisionByExclusion(-1, true);
+    }
+
+    initPlayer() {
+        this.start = { x: 100, y: 450 };
+        this.player = new Player(this, this.start.x, this.start.y, 'player');
+        this.cameras.main.startFollow(this.player);
+        this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+
+        this.physics.add.collider(this.player, this.platforms);
+        this.physics.add.collider(this.player, this.deathPlatforms, this.resetLevel, null, this);
+        this.physics.add.collider(this.player.bulletStash, this.platforms, this.bulletHitBlock, null, this);
+    }
+
     initObjects(map) {
-        // Consumables
-        let ammoPackObjects = map.getObjectLayer('AmmoObject')['objects'];
-        this.ammoPacks = [];
-        for (let i = 0; i < ammoPackObjects.length; i++) {
-            let ammoPack = new AmmoPack(this, ammoPackObjects[i].x, ammoPackObjects[i].y);
+        this.initConsumables(map);
+        this.initStatics(map);
+    }
+
+    initConsumables(map) {
+        this.consumables = [];
+
+        map.getObjectLayer('AmmoObject')['objects'].forEach(ammoPackObject => {
+            let ammoPack = new AmmoPack(this, ammoPackObject.x, ammoPackObject.y);
             this.physics.add.overlap(this.player, ammoPack, ammoPack.use, null, ammoPack);
-            this.ammoPacks.push(ammoPack);
-        }
+            this.consumables.push(ammoPack);
+        });
 
-        let shootBoostObjects = map.getObjectLayer('CollectableObject')['objects'];
-        this.shootBoosts = [];
-        for (let i = 0; i < shootBoostObjects.length; i++) {
-            let shootBoost = new ShootBoost(this, shootBoostObjects[i].x, shootBoostObjects[i].y);
+        map.getObjectLayer('CollectableObject')['objects'].forEach(shootBoostObject => {
+            let shootBoost = new ShootBoost(this, shootBoostObject.x, shootBoostObject.y);
             this.physics.add.overlap(this.player, shootBoost, shootBoost.use, null, shootBoost);
-            this.shootBoosts.push(shootBoost);
-        }
+            this.consumables.push(shootBoost);
+        });
+    }
 
-        // Statics
-        let midAirJumpObjects = map.getObjectLayer('DoubleJumpObject')['objects'];
-        for (let i = 0; i < midAirJumpObjects.length; i++) {
-            let midAirJump = new MidAirJump(this, midAirJumpObjects[i].x, midAirJumpObjects[i].y);
+    initStatics(map) {
+        map.getObjectLayer('DoubleJumpObject')['objects'].forEach(midAirJumpObject => {
+            let midAirJump = new MidAirJump(this, midAirJumpObject.x, midAirJumpObject.y);
             this.physics.add.overlap(this.player, midAirJump, midAirJump.use, null, midAirJump);
-        }
+        });
 
-        let portalObjects = map.getObjectLayer('PortalObject')['objects'];
         let portals = [];
-        for (let i = 0; i < portalObjects.length; i++) {
-            let portal = new Portal(this, portalObjects[i].x, portalObjects[i].y);
+        map.getObjectLayer('PortalObject')['objects'].forEach(portalObject => {
+            let portal = new Portal(this, portalObject.x, portalObject.y);
             this.physics.add.overlap(this.player, portal, portal.teleportPlayer, null, portal);
-            //this.physics.add.overlap(this.player.bulletStash, portal, portal.teleportObject, null, this);
+            this.physics.add.overlap(this.player.bulletStash, portal, portal.teleportObject, null, portal);
             portals.push(portal);
-        }
+        });
 
         portals[0].setTeleportPoint(portals[1]);
         portals[1].setTeleportPoint(portals[0]);
     }
 
     // Collision functions
-    bulletHitBlock(bullet, platform) {
+    bulletHitBlock(bullet) {
         bullet.stash();
-    }
-
-    teleportObject(object, portal) {
-        portal.teleport(object, 16);
     }
 
     resetLevel(player) {
         player.reset(this.start);
 
-        // Reset consumables
-        for (let i = 0; i < this.ammoPacks.length; i++) {
-            let ammoPack = this.ammoPacks[i];
-            if (ammoPack.active == false) {
-                ammoPack.enableBody(true, ammoPack.x, ammoPack.y, true, true);
-            }
-        }
-
-        for (let i = 0; i < this.shootBoosts.length; i++) {
-            let shootBoost = this.shootBoosts[i];
-            if (shootBoost.active == false) {
-                shootBoost.enableBody(true, shootBoost.x, shootBoost.y, true, true);
+        // Reset used consumables
+        for (let i = 0; i < this.consumables.length; i++) {
+            let consumable = this.consumables[i];
+            if (consumable.active == false) {
+                consumable.enableBody(true, consumable.x, consumable.y, true, true);
             }
         }
     }

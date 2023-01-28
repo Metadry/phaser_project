@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import hudConfig from '../scripts/hud/hudConfig';
 import Portal from '../scripts/environment/Portal';
 import Player from '../scripts/player/Player';
-import MidAirJump from '../scripts/powerups/MidAirJump';
+import MidAirJump from '../scripts/items/MidAirJump';
 
 export default class PlayerPlayground extends Phaser.Scene {
     preload() {
@@ -49,23 +49,23 @@ export default class PlayerPlayground extends Phaser.Scene {
 
         // HUD 
         // this.hud = new hudConfig(this, )
-        
+
         // HUD - HealthBar
         this.healthBar = this.add.graphics();
         this.healthBar.fillStyle(0x00ff00, 1);
         this.healthBar.fillRect(59, 20, 160, 20);
         let healthIcon = this.add.image(30, 30, 'healthBar').setScale(0.15);
-        
+
         // HUD - AmmoBar
         this.ammo = this.add.graphics();
         this.ammo.fillStyle(0xfd193e, 1);
         this.ammo.fillRect(59, 60, 150, 20); // Iteraciones por 30 puntos
         let ammoHover = this.add.image(135, 70, 'ammoHover').setScale(0.24, 0.25);
         let ammoIcon = this.add.image(29, 70, 'ammoIcon').setScale(0.12);
-        
+
         // HUD - InfiniteAmmoIcon
         let infiniteAmmo = this.add.image(76, 72, 'infiniteAmmo').setScale(0.05);
-        
+
         // HUD - FIX TO CAMERA
         this.ammo.setScrollFactor(0);
         this.healthBar.setScrollFactor(0);
@@ -78,7 +78,7 @@ export default class PlayerPlayground extends Phaser.Scene {
         infiniteAmmo.setVisible(false); // Set infiniteAmmo disabled by default
         //ammoHover.setVisible(false);
         //this.ammo.setVisible(false);
-        
+
         // Player 
         this.player = new Player(this, 400, 200, 'player');
         this.cameras.main.startFollow(this.player);
