@@ -50,6 +50,9 @@ export default class Level extends Phaser.Scene {
         this.load.audio('ground', 'sounds/effects/ground.mp3');
         this.load.audio('hurt', 'sounds/effects/hurt.mp3');
         this.load.audio('teleport', 'sounds/effects/teleport.mp3');
+
+        //Music
+        this.load.audio('phaserMusic', 'sounds/effects/phaserMusic.mp3');
     }
 
     create() {
@@ -57,6 +60,7 @@ export default class Level extends Phaser.Scene {
         this.initPlayer();
         this.initObjects();
         this.initHud();
+        this.sound.play('phaserMusic');
     }
 
     update() {
