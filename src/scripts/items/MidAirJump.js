@@ -4,7 +4,7 @@ export default class MidAirJump extends Phaser.Physics.Arcade.Sprite {
         this.scene = scene;
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
-        this.body.allowGravity = false;
+        this.body.setAllowGravity(false);
 
         this.enabled = true;
     }

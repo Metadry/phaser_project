@@ -4,7 +4,7 @@ export default class Portal extends Phaser.Physics.Arcade.Sprite {
         this.scene = scene;
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
-        this.body.allowGravity = false;
+        this.body.setAllowGravity(false);
         this.body.setSize(32, 50);
         this.body.setOffset(16, 14);
 
@@ -16,6 +16,10 @@ export default class Portal extends Phaser.Physics.Arcade.Sprite {
         if (Phaser.Input.Keyboard.JustDown(this.scene.player.cursors.up)) {
             this.teleport(this.scene.player, 0);
         }
+    }
+
+    teleportObject(portal, object) {
+        this.teleport(object, 16);
     }
 
     teleport(object, offset) {
